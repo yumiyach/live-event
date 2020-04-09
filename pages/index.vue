@@ -8,18 +8,29 @@
       show-arrows-on-hover
     >
       <v-carousel-item v-for="(booth, i) in boothList" :key="i">
-        <v-sheet
-          height="100%"
-          :style="{
-            background: 'url(' + booth.image + ')',
-            backgroundSize: 'cover',
-            backgroundPosition: 'center'
-          }"
+        <v-layout
+          wrap
+          style="height:calc(100vh - 120px); overflow-y:scroll; overflow-x:hidden"
+          v-on:scroll.passive="onScroll"
         >
-          <v-row class="fill-height" align="center" justify="center">
-            <div class="display-3">{{ booth.name }}</div>
+          <v-layout
+            justify-center
+            align-center
+            wrap
+            :style="{
+              height: 'calc(100vh - 120px - 100px - ' + offsetTop + 'px)'
+            }"
+          >
+            <v-img :src="booth.image" style="height:100%" />
+          </v-layout>
+          <v-row>
+            <v-container style="min-height:320px" class="overflow-y-auto">
+              <v-content>
+                <p class="display-3">{{ booth.name }}</p>
+              </v-content>
+            </v-container>
           </v-row>
-        </v-sheet>
+        </v-layout>
       </v-carousel-item>
     </v-carousel>
     <v-content>
@@ -36,14 +47,21 @@
               width="80"
               @click="toggle"
               :style="{
-                backgroundColor: '#000',
                 backgroundImage: 'url(' + booth.image + ')',
                 backgroundSize: 'cover',
-                backgroundPosition: 'center',
-                opacity: active ? 1 : 0.5
+                backgroundPosition: 'center'
               }"
             >
-              <v-row class="fill-height" align="center" justify="center">
+              <v-row
+                class="fill-height caption"
+                align="center"
+                justify="center"
+                :style="{
+                  backgroundColor: '#000',
+                  opacity: active ? 0 : 0.6
+                }"
+              >
+                {{ booth.name }}
               </v-row>
             </v-card>
           </v-slide-item>
@@ -83,7 +101,18 @@ export default {
           image: require('~/assets/images/background.jpg')
         }
       ],
-      model: null
+      model: null,
+      offsetTop: 0
+    }
+  },
+  watch: {
+    model() {
+      this.offsetTop = 0
+    }
+  },
+  methods: {
+    onScroll(e) {
+      this.offsetTop = e.target.scrollTop < 100 ? e.target.scrollTop : 100
     }
   }
 }
