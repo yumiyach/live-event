@@ -2,72 +2,58 @@
   <div>
     <v-carousel
       v-model="model"
-      height="calc(100vh - 120px)"
+      height="calc(100vh - 220px)"
       hide-delimiter-background
       hide-delimiters
       show-arrows-on-hover
     >
       <v-carousel-item v-for="(booth, i) in boothList" :key="i">
-        <v-layout
-          wrap
-          style="height:calc(100vh - 120px); overflow-y:scroll; overflow-x:hidden"
-          v-on:scroll.passive="onScroll"
-        >
+        <v-layout wrap>
           <v-layout
             justify-center
             align-center
             wrap
             :style="{
-              height: 'calc(100vh - 120px - 100px - ' + offsetTop + 'px)'
+              height: 'calc(100vh - 220px)'
             }"
           >
-            <v-img :src="booth.image" style="height:100%" />
+            <v-img :src="booth.image" style="height:100%"/>
           </v-layout>
-          <v-row>
-            <v-container style="min-height:320px" class="overflow-y-auto">
-              <v-content>
-                <p class="display-3">{{ booth.name }}</p>
-              </v-content>
-            </v-container>
-          </v-row>
         </v-layout>
       </v-carousel-item>
     </v-carousel>
-    <v-content>
-      <v-layout justify-center>
-        <v-slide-group v-model="model" class="pa-4" mandatory center-active>
-          <v-slide-item
-            v-for="(booth, i) in boothList"
-            :key="i"
-            v-slot:default="{ active, toggle }"
-          >
-            <v-card
-              class="mx-4"
-              height="80"
-              width="80"
-              @click="toggle"
-              :style="{
-                backgroundImage: 'url(' + booth.image + ')',
-                backgroundSize: 'cover',
-                backgroundPosition: 'center'
-              }"
+    <v-container>
+      <v-content>
+        <p class="display-3">{{ boothList[model].name }}</p>
+      </v-content>
+    </v-container>
+    <v-footer fixed>
+      <v-content>
+        <v-layout justify-center>
+          <v-slide-group v-model="model" class="pa-4" mandatory center-active>
+            <v-slide-item
+              v-for="(booth, i) in boothList"
+              :key="i"
+              v-slot:default="{ active, toggle }"
             >
-              <v-row
-                class="fill-height caption"
-                align="center"
-                justify="center"
-                :style="{
-                  backgroundColor: '#000',
-                  opacity: active ? 0 : 0.6
-                }"
-              >
-                {{ booth.name }}
-              </v-row>
-            </v-card>
-          </v-slide-item>
-        </v-slide-group>
-      </v-layout>
-    </v-content>
+              <v-card class="mx-4" height="80" width="80" @click="toggle">
+                <v-img :src="booth.image" aspect-ratio="1">
+                  <v-row
+                    class="fill-height caption"
+                    align="center"
+                    justify="center"
+                    :style="{
+                    backgroundColor: '#000',
+                    opacity: active ? 0 : 0.6
+                  }"
+                  >{{ booth.name }}</v-row>
+                </v-img>
+              </v-card>
+            </v-slide-item>
+          </v-slide-group>
+        </v-layout>
+      </v-content>
+    </v-footer>
   </div>
 </template>
 
@@ -101,18 +87,7 @@ export default {
           image: require('~/assets/images/background.jpg')
         }
       ],
-      model: null,
-      offsetTop: 0
-    }
-  },
-  watch: {
-    model() {
-      this.offsetTop = 0
-    }
-  },
-  methods: {
-    onScroll(e) {
-      this.offsetTop = e.target.scrollTop < 100 ? e.target.scrollTop : 100
+      model: 0
     }
   }
 }
