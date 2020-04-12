@@ -7,7 +7,7 @@
         :style="{color:$vuetify.theme.currentTheme.primary}"
       >オンラインイベント</v-toolbar-title>
       <v-spacer></v-spacer>
-      <v-btn text small color="primary">TOP</v-btn>
+      <v-btn text small color="primary" to="/">TOP</v-btn>
     </v-app-bar>
     <v-carousel
       v-model="model"
@@ -310,6 +310,11 @@ export default {
   watch: {
     model() {
       window.scrollTo(0, 0)
+    }
+  },
+  created() {
+    if (this.$router.history.current.hash) {
+      this.model = parseInt(this.$router.history.current.hash.replace('#', ''))
     }
   }
 }
