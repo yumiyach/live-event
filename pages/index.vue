@@ -36,31 +36,79 @@
           </div>
         </v-row>
 
-        <v-row>
-          <v-col v-for="(item, i) in boothList[model].itemList" :key="i" cols="12" sm="6" lg="4">
-            <v-card>
-              <v-row class="ma-0">
-                <v-col class="pa-0">
-                  <v-img style="height:100%" :src="item.image" aspect-ratio="0.707"/>
-                </v-col>
-                <v-col class="pa-0" style="display: flex;flex-direction: column;">
-                  <v-card-title v-text="item.name"></v-card-title>
-                  <v-card-subtitle v-text="item.description"></v-card-subtitle>
-                  <v-card-actions class="mt-auto">
-                    <v-btn
-                      v-for="(link, k) in item.linkList"
-                      :key="k"
-                      :href="link.url"
-                      target="_blank"
-                      small
-                      outlined
-                    >{{link.text}}</v-btn>
-                  </v-card-actions>
-                </v-col>
-              </v-row>
-            </v-card>
-          </v-col>
-        </v-row>
+        <v-tabs v-model="tab" grow>
+          <v-tab class="title">頒布物</v-tab>
+          <v-tab class="title">チャット</v-tab>
+        </v-tabs>
+
+        <v-tabs-items v-model="tab">
+          <v-tab-item>
+            <v-row>
+              <v-col
+                v-for="(item, i) in boothList[model].itemList"
+                :key="i"
+                cols="12"
+                sm="6"
+                lg="4"
+              >
+                <v-card>
+                  <v-row class="ma-0">
+                    <v-col class="pa-0">
+                      <v-img style="height:100%" :src="item.image" aspect-ratio="0.707"/>
+                    </v-col>
+                    <v-col class="pa-0" style="display: flex;flex-direction: column;">
+                      <v-card-title v-text="item.name"></v-card-title>
+                      <v-card-subtitle v-text="item.description"></v-card-subtitle>
+                      <v-card-actions class="mt-auto">
+                        <v-btn
+                          v-for="(link, k) in item.linkList"
+                          :key="k"
+                          :href="link.url"
+                          target="_blank"
+                          small
+                          outlined
+                        >{{link.text}}</v-btn>
+                      </v-card-actions>
+                    </v-col>
+                  </v-row>
+                </v-card>
+              </v-col>
+            </v-row>
+          </v-tab-item>
+          <v-tab-item>
+            <v-row>
+              <v-col
+                v-for="(item, i) in boothList[model].itemList"
+                :key="i"
+                cols="12"
+                sm="6"
+                lg="4"
+              >
+                <v-card>
+                  <v-row class="ma-0">
+                    <v-col class="pa-0">
+                      <v-img style="height:100%" :src="item.image" aspect-ratio="0.707"/>
+                    </v-col>
+                    <v-col class="pa-0" style="display: flex;flex-direction: column;">
+                      <v-card-title v-text="item.name"></v-card-title>
+                      <v-card-subtitle v-text="item.description"></v-card-subtitle>
+                      <v-card-actions class="mt-auto">
+                        <v-btn
+                          v-for="(link, k) in item.linkList"
+                          :key="k"
+                          :href="link.url"
+                          target="_blank"
+                          small
+                          outlined
+                        >{{link.text}}</v-btn>
+                      </v-card-actions>
+                    </v-col>
+                  </v-row>
+                </v-card>
+              </v-col>
+            </v-row>
+          </v-tab-item>
+        </v-tabs-items>
       </v-content>
     </v-container>
     <v-footer fixed class="pa-0" color="#ffffff88">
@@ -185,7 +233,8 @@ export default {
           itemList: []
         }
       ],
-      model: 0
+      model: 0,
+      tab: 0
     }
   }
 }
