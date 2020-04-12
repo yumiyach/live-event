@@ -1,9 +1,13 @@
 <template>
   <div>
-    <v-app-bar dense>
+    <v-app-bar dense color="#fff">
       <v-spacer></v-spacer>
-      <v-toolbar-title>オンラインイベント</v-toolbar-title>
+      <v-toolbar-title
+        class="font-weight-black"
+        :style="{color:$vuetify.theme.currentTheme.primary}"
+      >オンラインイベント</v-toolbar-title>
       <v-spacer></v-spacer>
+      <v-btn text small color="primary">TOP</v-btn>
     </v-app-bar>
     <v-carousel
       v-model="model"
@@ -35,7 +39,7 @@
             <v-btn class="mx-1" fab dark small color="#55acee">
               <v-icon dark>mdi-twitter</v-icon>
             </v-btn>
-            <v-btn fab dark small>
+            <v-btn fab dark small color="primary">
               <v-icon dark>mdi-gift</v-icon>
             </v-btn>
           </div>
@@ -87,7 +91,7 @@
                 <v-list-item-content>
                   <v-text-field label="名前"></v-text-field>
                   <v-textarea name="input-7-1" label="メッセージ" rows="3"></v-textarea>
-                  <v-btn depressed small>投稿</v-btn>
+                  <v-btn depressed small color="primary">投稿</v-btn>
                 </v-list-item-content>
               </v-list-item>
               <v-divider/>
