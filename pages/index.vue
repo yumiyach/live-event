@@ -136,7 +136,9 @@
                     opacity: active ? 0 : 0.6,
                     color:'#fff',
                     }"
-                  >{{ booth.name }}</v-row>
+                  >
+                    <v-col class="text-center">{{ booth.name }}</v-col>
+                  </v-row>
                 </v-img>
               </v-card>
             </v-slide-item>
@@ -196,7 +198,7 @@ export default {
           ]
         },
         {
-          name: 'こぶんやさん２',
+          name: 'こぶんやさん2',
           image:
             'https://intojapanwaraku.com/wp-content/uploads/2019/05/GMF0793ii0.png',
           itemList: [
@@ -257,6 +259,24 @@ export default {
               ]
             }
           ]
+        },
+        {
+          name: 'こぶんやさん3',
+          image:
+            'https://intojapanwaraku.com/wp-content/uploads/2019/05/GMF0793ii0.png',
+          itemList: []
+        },
+        {
+          name: 'こぶんやさん4',
+          image:
+            'https://intojapanwaraku.com/wp-content/uploads/2019/05/GMF0793ii0.png',
+          itemList: []
+        },
+        {
+          name: 'こぶんやさん5',
+          image:
+            'https://intojapanwaraku.com/wp-content/uploads/2019/05/GMF0793ii0.png',
+          itemList: []
         }
       ],
       chatList: [
@@ -274,6 +294,9 @@ export default {
             date: new Date()
           }
         ],
+        [],
+        [],
+        [],
         []
       ],
       model: 0,
