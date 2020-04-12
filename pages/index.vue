@@ -86,28 +86,20 @@
                 </v-list-item-content>
               </v-list-item>
               <v-divider/>
-              <v-list-item>
-                <v-list-item-content>
-                  <p class="mb-2">嬉しくいみじくて、夜昼これを見るよりうち始め、またまたも見まほしきに、ありもつかぬ都のほとりに、たれかは物語求め見する人のあらむ。</p>
-                  <v-list-item-subtitle class="d-flex">
-                    <div class="mr-2">菅原孝標女菅原孝標女菅原孝標女菅原孝標女</div>
-                    <div class="shrink ml-auto">2020/01/01</div>
-                  </v-list-item-subtitle>
-                </v-list-item-content>
-              </v-list-item>
-              <v-divider/>
-              <v-list-item>
-                <v-list-item-content>
-                  <p
-                    class="mb-2"
-                  >源氏物語読みました！！！読み始めたら止まらなくて一日中ずっと読んでしまいました…… 続き超期待！！！！パンデミックが収束して京でイベント開催されたら、絶対に行きます！！！尊いお話、ありがとうございました！</p>
-                  <v-list-item-subtitle class="d-flex">
-                    <div class="mr-2">すがたかちゃん</div>
-                    <div class="shrink ml-auto">2020/01/01</div>
-                  </v-list-item-subtitle>
-                </v-list-item-content>
-              </v-list-item>
-              <v-divider/>
+              <div v-for="(item, i) in chatList[model]" :key="i">
+                <v-list-item>
+                  <v-list-item-content>
+                    <p class="mb-2">{{item.message}}</p>
+                    <v-list-item-subtitle class="d-flex">
+                      <div class="mr-2">{{item.name}}</div>
+                      <div
+                        class="shrink ml-auto"
+                      >{{item.date.getFullYear()}}/{{(item.date.getMonth()+1)}}/{{(item.date.getDate())}} {{item.date.getHours()}}:{{(item.date.getMinutes())}}:{{(item.date.getSeconds())}}</div>
+                    </v-list-item-subtitle>
+                  </v-list-item-content>
+                </v-list-item>
+                <v-divider/>
+              </div>
               <v-list-item>
                 <v-list-item-content>
                   <p class="mb-2">メッセージは以上です</p>
@@ -165,7 +157,43 @@ export default {
       boothList: [
         {
           name: 'こぶんやさん',
-          image: 'https://maroasobi.com/wp-content/uploads/hyoen1.jpg',
+          image:
+            'https://intojapanwaraku.com/wp-content/uploads/2019/05/GMF0793ii0.png',
+          itemList: [
+            {
+              name: 'とさにっき！',
+              image:
+                'https://images-na.ssl-images-amazon.com/images/I/51N8UiIo3EL._SX366_BO1,204,203,200_.jpg',
+              description:
+                '紀貫之女体化ドタバタギャグ。土佐旅行へ赴任した貫之が京都へ帰る途中、事件に巻き込まれます。',
+              linkList: [
+                { text: '通販', url: 'https://www.amazon.co.jp/dp/4043574207' },
+                {
+                  text: 'サンプル',
+                  url:
+                    'https://www.aozora.gr.jp/cards/000155/files/832_16016.html'
+                }
+              ]
+            },
+            {
+              name: '源氏物語',
+              image: 'https://m.media-amazon.com/images/I/61w4fOd-X3L.jpg',
+              description:
+                '光源氏×紫の上イチャラブNL。光源氏に過去の女がいたような描写があります注意。',
+              linkList: [
+                {
+                  text: '青空文庫',
+                  url:
+                    'https://www.aozora.gr.jp/cards/000052/files/5016_9758.html'
+                }
+              ]
+            }
+          ]
+        },
+        {
+          name: 'こぶんやさん２',
+          image:
+            'https://intojapanwaraku.com/wp-content/uploads/2019/05/GMF0793ii0.png',
           itemList: [
             {
               name: 'とさにっき！',
@@ -224,25 +252,32 @@ export default {
               ]
             }
           ]
-        },
-        {
-          name: 'サークル名2',
-          image: require('~/assets/images/background.jpg'),
-          itemList: []
-        },
-        {
-          name: 'サークル名3',
-          image: require('~/assets/images/background.jpg'),
-          itemList: []
-        },
-        {
-          name: 'サークル名4',
-          image: require('~/assets/images/background.jpg'),
-          itemList: []
         }
+      ],
+      chatList: [
+        [
+          {
+            message:
+              '嬉しくいみじくて、夜昼これを見るよりうち始め、またまたも見まほしきに、ありもつかぬ都のほとりに、たれかは物語求め見する人のあらむ。',
+            name: '菅原孝標女',
+            date: new Date()
+          },
+          {
+            message:
+              '源氏物語読みました！！！読み始めたら止まらなくて一日中ずっと読んでしまいました…… 続き超期待！！！！パンデミックが収束して京でイベント開催されたら、絶対に行きます！！！尊いお話、ありがとうございました！',
+            name: 'すがたかちゃん',
+            date: new Date()
+          }
+        ],
+        []
       ],
       model: 0,
       tab: 0
+    }
+  },
+  watch: {
+    model() {
+      window.scrollTo(0, 0)
     }
   }
 }
