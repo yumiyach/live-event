@@ -75,42 +75,50 @@
               </v-col>
             </v-row>
           </v-tab-item>
+
           <v-tab-item>
-            <v-row>
-              <v-col
-                v-for="(item, i) in boothList[model].itemList"
-                :key="i"
-                cols="12"
-                sm="6"
-                lg="4"
-              >
-                <v-card>
-                  <v-row class="ma-0">
-                    <v-col class="pa-0">
-                      <v-img style="height:100%" :src="item.image" aspect-ratio="0.707"/>
-                    </v-col>
-                    <v-col class="pa-0" style="display: flex;flex-direction: column;">
-                      <v-card-title v-text="item.name"></v-card-title>
-                      <v-card-subtitle v-text="item.description"></v-card-subtitle>
-                      <v-card-actions class="mt-auto">
-                        <v-btn
-                          v-for="(link, k) in item.linkList"
-                          :key="k"
-                          :href="link.url"
-                          target="_blank"
-                          small
-                          outlined
-                        >{{link.text}}</v-btn>
-                      </v-card-actions>
-                    </v-col>
-                  </v-row>
-                </v-card>
-              </v-col>
-            </v-row>
+            <v-list three-line>
+              <v-list-item>
+                <v-list-item-content>
+                  <v-text-field label="名前"></v-text-field>
+                  <v-textarea name="input-7-1" label="メッセージ" rows="3"></v-textarea>
+                  <v-btn depressed small>投稿</v-btn>
+                </v-list-item-content>
+              </v-list-item>
+              <v-divider/>
+              <v-list-item>
+                <v-list-item-content>
+                  <p class="mb-2">嬉しくいみじくて、夜昼これを見るよりうち始め、またまたも見まほしきに、ありもつかぬ都のほとりに、たれかは物語求め見する人のあらむ。</p>
+                  <v-list-item-subtitle class="d-flex">
+                    <div class="mr-2">菅原孝標女菅原孝標女菅原孝標女菅原孝標女</div>
+                    <div class="shrink ml-auto">2020/01/01</div>
+                  </v-list-item-subtitle>
+                </v-list-item-content>
+              </v-list-item>
+              <v-divider/>
+              <v-list-item>
+                <v-list-item-content>
+                  <p
+                    class="mb-2"
+                  >源氏物語読みました！！！読み始めたら止まらなくて一日中ずっと読んでしまいました…… 続き超期待！！！！パンデミックが収束して京でイベント開催されたら、絶対に行きます！！！尊いお話、ありがとうございました！</p>
+                  <v-list-item-subtitle class="d-flex">
+                    <div class="mr-2">すがたかちゃん</div>
+                    <div class="shrink ml-auto">2020/01/01</div>
+                  </v-list-item-subtitle>
+                </v-list-item-content>
+              </v-list-item>
+              <v-divider/>
+              <v-list-item>
+                <v-list-item-content>
+                  <p class="mb-2">メッセージは以上です</p>
+                </v-list-item-content>
+              </v-list-item>
+            </v-list>
           </v-tab-item>
         </v-tabs-items>
       </v-content>
     </v-container>
+
     <v-footer fixed class="pa-0" color="#ffffff88">
       <v-content>
         <v-layout justify-center>
