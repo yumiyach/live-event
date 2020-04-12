@@ -1,5 +1,10 @@
 <template>
   <div>
+    <v-app-bar dense>
+      <v-spacer></v-spacer>
+      <v-toolbar-title>オンラインイベント</v-toolbar-title>
+      <v-spacer></v-spacer>
+    </v-app-bar>
     <v-carousel
       v-model="model"
       height="calc(100vh - 220px)"
@@ -38,7 +43,7 @@
 
         <v-tabs v-model="tab" grow>
           <v-tab class="title">頒布物</v-tab>
-          <v-tab class="title">チャット</v-tab>
+          <v-tab class="title">コメント</v-tab>
         </v-tabs>
 
         <v-tabs-items v-model="tab">
