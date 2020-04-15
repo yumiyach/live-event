@@ -5,7 +5,7 @@
       <v-toolbar-title
         class="font-weight-black"
         :style="{ color: $vuetify.theme.currentTheme.primary }"
-        >オンラインイベント</v-toolbar-title
+        >コブンティア</v-toolbar-title
       >
       <v-spacer></v-spacer>
       <v-btn text small color="primary" to="/">TOP</v-btn>
@@ -54,12 +54,6 @@
         <v-tabs v-model="tab" grow>
           <v-tab class="title">頒布物</v-tab>
           <v-tab class="title">コメント</v-tab>
-          <v-tab class="title">
-            ライブ
-            <v-avatar class="ml-2" size="20">
-              <v-icon small>mdi-antenna</v-icon>
-            </v-avatar>
-          </v-tab>
         </v-tabs>
 
         <v-tabs-items v-model="tab">
@@ -148,59 +142,6 @@
             </v-list>
           </v-tab-item>
 
-          <v-tab-item>
-            <v-list three-line>
-              <v-list-item>
-                <v-list-item-content>
-                  <v-list-item-title>配信中！</v-list-item-title>
-                </v-list-item-content>
-
-                <v-spacer></v-spacer>
-
-                <v-list-item-icon>
-                  <v-btn icon>
-                    <v-icon>mdi-play</v-icon>
-                  </v-btn>
-                </v-list-item-icon>
-              </v-list-item>
-              <v-list-item>
-                <v-list-item-content>
-                  <v-text-field label="名前"></v-text-field>
-                  <v-textarea
-                    name="input-7-1"
-                    label="メッセージ"
-                    rows="3"
-                  ></v-textarea>
-                  <v-btn depressed small color="primary">投稿</v-btn>
-                </v-list-item-content>
-              </v-list-item>
-              <v-divider />
-              <div v-for="(item, i) in chatList[model]" :key="i">
-                <v-list-item>
-                  <v-list-item-content>
-                    <p class="mb-2">{{ item.message }}</p>
-                    <v-list-item-subtitle class="d-flex">
-                      <div class="mr-2">{{ item.name }}</div>
-                      <div class="shrink ml-auto">
-                        {{ item.date.getFullYear() }}/{{
-                          item.date.getMonth() + 1
-                        }}/{{ item.date.getDate() }}
-                        {{ item.date.getHours() }}:{{
-                          item.date.getMinutes()
-                        }}:{{ item.date.getSeconds() }}
-                      </div>
-                    </v-list-item-subtitle>
-                  </v-list-item-content>
-                </v-list-item>
-                <v-divider />
-              </div>
-              <v-list-item>
-                <v-list-item-content>
-                  <p class="mb-2">メッセージは以上です</p>
-                </v-list-item-content>
-              </v-list-item>
-            </v-list>
-          </v-tab-item>
         </v-tabs-items>
       </v-content>
     </v-container>
