@@ -35,7 +35,9 @@
             <itemList :boothId="boothList[currentBoothId].id"/>
           </v-tab-item>
 
-          <v-tab-item></v-tab-item>
+          <v-tab-item>
+            <commentList :boothId="boothList[currentBoothId].id"/>
+          </v-tab-item>
         </v-tabs-items>
       </v-content>
     </v-container>
@@ -77,9 +79,10 @@
 import { mapGetters, mapActions } from 'vuex'
 import boothHeader from '@/components/boothList/boothHeader'
 import itemList from '@/components/boothList/itemList'
+import commentList from '@/components/boothList/commentList'
 
 export default {
-  components: { boothHeader, itemList },
+  components: { boothHeader, itemList, commentList },
   props: {
     eventId: {
       type: String,
