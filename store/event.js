@@ -1,5 +1,6 @@
 import { pushObjectToList, getObjectFromList } from '~/plugins/functions'
 import Event from '~/plugins/firebase/store/event'
+import auth from '~/plugins/firebase/account/auth'
 
 export const state = () => ({
   eventList: []
@@ -30,6 +31,13 @@ export const actions = {
       await event.ready
       commit('addEvent', event)
     }
+    return event
+  },
+  async createEvent({ commit, dispatch }, data) {
+    data.concluded.userId = auth.userId
+    const event = new Event(data)
+    await event.ready
+    commit('addContent', event)
     return event
   }
 }
