@@ -12,6 +12,7 @@
         <v-icon>mdi-information-variant</v-icon>
       </v-btn>
     </v-app-bar>
+    <boothList :eventId="eventId"/>
     <v-dialog v-model="eventInfomationVisible" max-width="300">
       <v-card>
         <v-card-title>{{eventData.name}}</v-card-title>
@@ -29,8 +30,10 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex'
+import boothList from '~/components/boothList'
 
 export default {
+  components: { boothList },
   data: () => ({
     eventInfomationVisible: false
   }),
@@ -50,11 +53,6 @@ export default {
     ...mapActions('event', ['getEvent']),
     init() {
       this.getEvent(this.eventId)
-      if (this.$router.history.current.hash) {
-        this.model = parseInt(
-          this.$router.history.current.hash.replace('#', '')
-        )
-      }
     }
   }
 }
