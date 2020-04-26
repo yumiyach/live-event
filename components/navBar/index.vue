@@ -7,28 +7,8 @@
         </v-btn>
 
         <v-spacer/>
-        <v-toolbar-title
-          class="logo"
-          style="font-size:24px"
-          @click="$router.push('/')"
-        >{{eventData.name}}</v-toolbar-title>
+        <v-toolbar-title class="logo" style="font-size:24px" @click="$router.push('/')">ライブイベント</v-toolbar-title>
         <v-spacer/>
-
-        <v-btn fab depressed outlined x-small color="primary" @click="eventInfomationVisible=true">
-          <v-icon>mdi-information-variant</v-icon>
-        </v-btn>
-        <v-dialog v-model="eventInfomationVisible" max-width="300">
-          <v-card>
-            <v-card-title>{{eventData.name}}</v-card-title>
-            <v-card-text>
-              <p>{{eventData.description}}</p>
-            </v-card-text>
-            <v-card-actions>
-              <v-spacer></v-spacer>
-              <v-btn depressed @click="eventInfomationVisible = false">閉じる</v-btn>
-            </v-card-actions>
-          </v-card>
-        </v-dialog>
       </v-layout>
     </v-app-bar>
     <v-navigation-drawer v-model="drawer" temporary fixed>
@@ -48,22 +28,7 @@ export default {
     drawer: false
   }),
   computed: {
-    ...mapState('account', ['isLogin', 'loginUser']),
-    ...mapGetters('event', ['eventById']),
-    eventId() {
-      return this.$route.params.eventId
-    },
-    eventData() {
-      return this.eventById(this.eventId).data
-    }
-  },
-  methods: {
-    submitSearch(validate) {
-      if (validate) {
-        this.$router.push('/search/tag/' + encodeURIComponent(this.search))
-        this.searchMenuVisible = false
-      }
-    }
+    ...mapState('account', ['isLogin'])
   }
 }
 </script>
