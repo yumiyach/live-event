@@ -43,7 +43,7 @@
     </v-container>
 
     <v-footer fixed class="pa-0" color="#ffffff88">
-      <v-content>
+      <v-content class="pa-0">
         <v-layout justify-center>
           <v-slide-group v-model="currentBoothId" class="pa-4" mandatory center-active>
             <v-slide-item

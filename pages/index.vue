@@ -1,5 +1,17 @@
 <template>
   <div>
+    <v-app-bar dense color="#fff">
+      <v-btn text small color="primary" to="/">TOP</v-btn>
+      <v-spacer></v-spacer>
+      <v-toolbar-title
+        class="font-weight-black"
+        :style="{color:$vuetify.theme.currentTheme.primary}"
+      >{{eventData.name}}</v-toolbar-title>
+      <v-spacer></v-spacer>
+      <v-btn fab depressed outlined x-small color="primary" @click="eventInfomationVisible=true">
+        <v-icon>mdi-information-variant</v-icon>
+      </v-btn>
+    </v-app-bar>
     <v-container>
       <v-content>
         <v-card

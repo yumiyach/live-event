@@ -22,17 +22,13 @@ export const mutations = {
 
 export const actions = {
   init({ commit }) {
+    console.log('init')
     auth.onLogin(() => {
-      commit('account/setAccount', auth, {
-        root: true
-      })
-      commit('account/setUserId', auth.userId, {
-        root: true
-      })
+      console.log('login')
+      commit('setAccount', auth)
+      commit('setUserId', auth.userId)
     })
-    commit('account/setAccount', auth, {
-      root: true
-    })
+    commit('setAccount', auth)
   },
   login({}, provider) {
     auth.showSignInPopup(provider)
