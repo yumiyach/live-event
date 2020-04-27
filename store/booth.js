@@ -93,7 +93,7 @@ export const actions = {
     data.concluded.userId = auth.userId
     const booth = new Booth(data)
     await booth.ready
-    commit('addContent', booth)
+    commit('addBooth', booth)
     return booth
   }
 }

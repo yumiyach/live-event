@@ -5,25 +5,22 @@ export default class Ref {
   ref
   ready
 
-  async init(path, imageDataUrl) {
-    if (!imageDataUrl) {
+  async init(path, imageFile) {
+    if (!imageFile) {
       this.path = path
       this.ref = this.parentRef.child(path)
       this.imageUrl = await this.ref.getDownloadURL()
     } else {
-      await this.create(path, imageDataUrl)
+      await this.create(path, imageFile)
     }
   }
 
-  async create(path, imageDataUrl) {
+  async create(path, imageFile) {
     try {
-      if (typeof imageDataUrl.match(/string/i)) {
-        const imageBlob = this.toBlob(imageDataUrl)
-        await this.parentRef.child(path).put(imageBlob)
-        this.path = path
-        this.ref = this.parentRef.child(path)
-        this.imageUrl = await this.ref.getDownloadURL()
-      }
+      await this.parentRef.child(path).put(imageFile)
+      this.path = path
+      this.ref = this.parentRef.child(path)
+      this.imageUrl = await this.ref.getDownloadURL()
     } catch (err) {
       console.error(err)
     }

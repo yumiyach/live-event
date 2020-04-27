@@ -55,7 +55,7 @@ export const actions = {
     data.concluded.userId = auth.userId
     const comment = new Comment(data)
     await comment.ready
-    commit('addContent', comment)
+    commit('addComment', comment)
     return comment
   }
 }

@@ -37,7 +37,7 @@ export const actions = {
     data.concluded.userId = auth.userId
     const event = new Event(data)
     await event.ready
-    commit('addContent', event)
+    commit('addEvent', event)
     return event
   }
 }
