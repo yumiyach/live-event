@@ -27,9 +27,15 @@
               </v-layout>
             </v-layout>
             <v-card-title>{{eventData.name}}</v-card-title>
-            <v-card-text class="d-flex align-center">
-              <v-chip class="mr-2" color="primary">主催者</v-chip>
-              <userItem v-if="eventData.userId" :userId="eventData.userId"/>
+            <v-card-text>
+              <v-layout align-center class="mb-2">
+                <v-chip small class="mr-2" color="primary">主催</v-chip>
+                <userItem v-if="eventData.userId" :userId="eventData.userId"/>
+              </v-layout>
+              <v-layout align-center>
+                <v-chip small class="mr-2" color="primary">日時</v-chip>
+                <div>{{date}}</div>
+              </v-layout>
             </v-card-text>
             <v-card-text>{{eventData.description}}</v-card-text>
             <v-card-actions>
@@ -65,6 +71,26 @@ export default {
     },
     eventData() {
       return this.eventById(this.eventId).data
+    },
+    date() {
+      if (!this.eventData.startDate || !this.eventData.endDate) {
+        return ''
+      }
+      return (
+        this.eventData.startDate.getFullYear() +
+        '/' +
+        ('00' + (this.eventData.startDate.getMonth() + 1)).slice(-2) +
+        '/' +
+        ('00' + this.eventData.startDate.getDay()).slice(-2) +
+        ' ' +
+        ('00' + this.eventData.startDate.getHours()).slice(-2) +
+        ':' +
+        ('00' + this.eventData.startDate.getMinutes()).slice(-2) +
+        '～' +
+        ('00' + this.eventData.endDate.getHours()).slice(-2) +
+        ':' +
+        ('00' + this.eventData.endDate.getMinutes()).slice(-2)
+      )
     }
   },
   methods: {

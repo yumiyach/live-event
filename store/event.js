@@ -8,6 +8,12 @@ export const state = () => ({
 
 export const mutations = {
   addEvent(state, event) {
+    if (event.data.startDate) {
+      event.data.startDate = event.data.startDate.toDate()
+    }
+    if (event.data.endDate) {
+      event.data.endDate = event.data.endDate.toDate()
+    }
     pushObjectToList(state.eventList, event)
   }
 }
