@@ -25,7 +25,7 @@ export const actions = {
   async getUser({ getters, commit }, id) {
     let user = getters.userById(id)
     if (user.notFound) {
-      commit('addUser', user)
+      commit('addUser', { ...user, notFound: false })
       user = new User(id)
       await user.ready
       commit('addUser', user)

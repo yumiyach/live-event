@@ -12,12 +12,26 @@
         <v-btn fab depressed outlined x-small color="primary" @click="eventInfomationVisible=true">
           <v-icon>mdi-information-variant</v-icon>
         </v-btn>
-        <v-dialog v-model="eventInfomationVisible" max-width="300">
+        <v-dialog v-model="eventInfomationVisible" max-width="1000px">
           <v-card>
+            <v-layout wrap>
+              <v-layout
+                justify-center
+                align-center
+                wrap
+                :style="{
+                height: 'calc(100vh - 220px)'
+              }"
+              >
+                <v-img :src="eventData.imageUrl" style="height:100%"/>
+              </v-layout>
+            </v-layout>
             <v-card-title>{{eventData.name}}</v-card-title>
-            <v-card-text>
-              <p>{{eventData.description}}</p>
+            <v-card-text class="d-flex align-center">
+              <v-chip class="mr-2" color="primary">主催者</v-chip>
+              <userItem v-if="eventData.userId" :userId="eventData.userId"/>
             </v-card-text>
+            <v-card-text>{{eventData.description}}</v-card-text>
             <v-card-actions>
               <v-spacer></v-spacer>
               <v-btn depressed @click="eventInfomationVisible = false">閉じる</v-btn>
@@ -34,12 +48,13 @@
 
 <script>
 import drawerMenu from '~/components/navBar/drawerMenu'
+import userItem from '~/components/userItem'
 import { mapState, mapActions, mapGetters } from 'vuex'
 
 export default {
-  components: { drawerMenu },
+  components: { drawerMenu, userItem },
   data: () => ({
-    eventInfomationVisible: false,
+    eventInfomationVisible: true,
     drawer: false
   }),
   computed: {
