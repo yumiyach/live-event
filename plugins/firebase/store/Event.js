@@ -29,4 +29,18 @@ export default class Event extends Document {
     })
     await this.getData()
   }
+  async update(data) {
+    if (!this.id) {
+      return
+    }
+    await this.ref.update(data.concluded)
+    if (data.imageFile) {
+      const cardImage = new EventImage(this.id, data.imageFile)
+      await cardImage.ready
+      await this.ref.update({
+        imageUrl: cardImage.imageUrl
+      })
+    }
+    await this.getData()
+  }
 }

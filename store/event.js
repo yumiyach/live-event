@@ -39,11 +39,26 @@ export const actions = {
     }
     return event
   },
+  async reloadEvent({ getters, commit }, id) {
+    const event = new Event(id)
+    await event.ready
+    commit('addEvent', event)
+    return event
+  },
   async createEvent({ commit, dispatch }, data) {
     data.concluded.userId = auth.userId
     const event = new Event(data)
     await event.ready
     commit('addEvent', event)
+    return event
+  },
+  async updateEvent({ commit, dispatch }, data) {
+    data.concluded.userId = auth.userId
+    const event = new Event(data.eventId)
+    await event.ready
+    await event.update(data)
+    commit('addCard', event)
+    await dispatch('reloadEvent', data.eventId)
     return event
   }
 }
