@@ -1,6 +1,6 @@
 <template>
-  <v-container>
-    <boothList :eventId="eventId" style="margin: 0 -12px;"/>
+  <v-container fill-height>
+    <boothList :eventId="eventId"/>
   </v-container>
 </template>
 

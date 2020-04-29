@@ -25,7 +25,7 @@ import { mapState, mapActions } from 'vuex'
 export default {
   data: () => ({
     visible: false,
-    jumpTo: ''
+    jumpTo: null
   }),
   computed: {
     ...mapState('account', ['isLogin'])
@@ -49,13 +49,8 @@ export default {
     init() {
       this.onLogin(() => {
         this.visible = false
-        switch (this.jumpTo) {
-          case 'create':
-            this.$router.push('/sort/create')
-            break
-          case 'mypage':
-            this.$router.push('/mypage')
-            break
+        if (this.jumpTo) {
+          this.$router.push(this.jumpTo)
         }
       })
     }

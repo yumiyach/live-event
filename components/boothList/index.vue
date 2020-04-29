@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <v-row>
     <template v-if="boothList.length">
       <v-carousel
         v-model="currentBoothId"
@@ -7,6 +7,7 @@
         hide-delimiter-background
         hide-delimiters
         show-arrows-on-hover
+        style="margin: 0 -12px;"
       >
         <v-carousel-item v-for="(booth, i) in boothList" :key="i">
           <v-layout wrap>
@@ -18,13 +19,13 @@
                 height: 'calc(100vh - 220px)'
               }"
             >
-              <v-img :src="booth.data.image" style="height:100%" />
+              <v-img :src="booth.data.image" style="height:100%"/>
             </v-layout>
           </v-layout>
         </v-carousel-item>
       </v-carousel>
       <v-container style="margin-bottom:112px">
-        <boothHeader :boothId="boothList[currentBoothId].id" />
+        <boothHeader :boothId="boothList[currentBoothId].id"/>
         <v-content>
           <v-tabs v-model="tab" grow>
             <v-tab class="title">頒布物</v-tab>
@@ -33,11 +34,11 @@
 
           <v-tabs-items v-model="tab">
             <v-tab-item>
-              <itemList :boothId="boothList[currentBoothId].id" />
+              <itemList :boothId="boothList[currentBoothId].id"/>
             </v-tab-item>
 
             <v-tab-item>
-              <commentList :boothId="boothList[currentBoothId].id" />
+              <commentList :boothId="boothList[currentBoothId].id"/>
             </v-tab-item>
           </v-tabs-items>
         </v-content>
@@ -46,12 +47,7 @@
       <v-footer fixed class="pa-0" color="#ffffff88">
         <v-content class="pa-0">
           <v-layout justify-center>
-            <v-slide-group
-              v-model="currentBoothId"
-              class="pa-4"
-              mandatory
-              center-active
-            >
+            <v-slide-group v-model="currentBoothId" class="pa-4" mandatory center-active>
               <v-slide-item
                 v-for="(booth, i) in boothList"
                 :key="i"
@@ -79,17 +75,32 @@
         </v-content>
       </v-footer>
     </template>
-  </div>
+    <template v-else>
+      <v-content>
+        <v-row align="center" justify="center">
+          <v-card>
+            <v-card-title>まだブースがありません。</v-card-title>
+            <v-card-text>ブースを作成して、イベントを盛り上げましょう！</v-card-text>
+            <v-card-actions class="justify-center">
+              <v-btn large color="primary" @click="addBooth">ブースを作成する</v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-row>
+      </v-content>
+      <loginDialog ref="loginDialog"/>
+    </template>
+  </v-row>
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex'
+import { mapGetters, mapState } from 'vuex'
+import loginDialog from '~/components/navBar/loginDialog'
 import boothHeader from '@/components/boothList/boothHeader'
 import itemList from '@/components/boothList/itemList'
 import commentList from '@/components/boothList/commentList'
 
 export default {
-  components: { boothHeader, itemList, commentList },
+  components: { boothHeader, itemList, commentList, loginDialog },
   props: {
     eventId: {
       type: String,
@@ -105,6 +116,7 @@ export default {
   },
   computed: {
     ...mapGetters('booth', ['boothListByEventId']),
+    ...mapState('account', ['isLogin']),
     boothList() {
       return this.boothListByEventId(this.eventId)
     }
@@ -123,6 +135,13 @@ export default {
         this.currentBoothId = parseInt(
           this.$router.history.current.hash.replace('#', '')
         )
+      }
+    },
+    addBooth() {
+      if (this.isLogin) {
+        this.$router.push(`/event/${this.eventId}/addBooth`)
+      } else {
+        this.$refs.loginDialog.open(`/event/${this.eventId}/addBooth`)
       }
     }
   }
