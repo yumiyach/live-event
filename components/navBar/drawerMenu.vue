@@ -19,8 +19,12 @@
 
     <v-list>
       <v-divider/>
-      <v-list-item nuxt to="/guideline">
+      <v-list-item nuxt to="/mypage">
         <v-list-item-title>マイページ</v-list-item-title>
+      </v-list-item>
+      <v-divider/>
+      <v-list-item nuxt to="/event/create">
+        <v-list-item-title>イベント作成</v-list-item-title>
       </v-list-item>
       <v-divider/>
       <v-list-item
