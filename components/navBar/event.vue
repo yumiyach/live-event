@@ -28,13 +28,15 @@
             </v-layout>
             <v-card-title>{{eventData.name}}</v-card-title>
             <v-card-text>
-              <v-layout align-center class="mb-2">
+              <v-layout align-center class="mb-2" wrap>
                 <v-chip small class="mr-2" color="primary">主催</v-chip>
                 <userItem v-if="eventData.userId" :userId="eventData.userId"/>
               </v-layout>
-              <v-layout align-center>
+              <v-layout align-center wrap>
                 <v-chip small class="mr-2" color="primary">日時</v-chip>
-                <div>{{date}}</div>
+                <v-chip v-if="inSession" label outlined x-small class="mr-2" color="primary">開催中</v-chip>
+                <v-chip v-else-if="until" label outlined x-small class="mr-2">{{until}}</v-chip>
+                <div class="mr-2">{{date}}</div>
               </v-layout>
             </v-card-text>
             <v-card-text>{{eventData.description}}</v-card-text>
@@ -61,7 +63,8 @@ export default {
   components: { drawerMenu, userItem },
   data: () => ({
     eventInfomationVisible: true,
-    drawer: false
+    drawer: false,
+    today: new Date()
   }),
   computed: {
     ...mapState('account', ['isLogin', 'loginUser']),
@@ -81,7 +84,7 @@ export default {
         '/' +
         ('00' + (this.eventData.startDate.getMonth() + 1)).slice(-2) +
         '/' +
-        ('00' + this.eventData.startDate.getDay()).slice(-2) +
+        ('00' + this.eventData.startDate.getDate()).slice(-2) +
         ' ' +
         ('00' + this.eventData.startDate.getHours()).slice(-2) +
         ':' +
@@ -91,6 +94,39 @@ export default {
         ':' +
         ('00' + this.eventData.endDate.getMinutes()).slice(-2)
       )
+    },
+    inSession() {
+      if (!this.eventData.startDate || !this.eventData.endDate) {
+        return false
+      }
+      const today = this.today.getTime()
+      const startDate = this.eventData.startDate.getTime()
+      const endDate = this.eventData.endDate.getTime()
+      if (startDate < today && today < endDate) {
+        return true
+      } else {
+        return false
+      }
+    },
+    until() {
+      if (!this.eventData.startDate || !this.eventData.endDate) {
+        return false
+      }
+      const today = this.today.getTime()
+      const startDate = this.eventData.startDate.getTime()
+      const endDate = this.eventData.endDate.getTime()
+      if (today < startDate) {
+        const until = startDate - today
+        if (24 * 60 * 60 * 1000 < until) {
+          return 'あと' + parseInt(until / (24 * 60 * 60 * 1000)) + '日'
+        }
+        if (60 * 60 * 1000 < until) {
+          return 'あと' + parseInt(until / (60 * 60 * 1000)) + '時間'
+        }
+        return 'あと' + parseInt(until / (60 * 1000)) + '分'
+      } else {
+        return '終了'
+      }
     }
   },
   methods: {
