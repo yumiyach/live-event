@@ -1,6 +1,6 @@
 <template>
   <v-container fill-height>
-    <component :is="isLoading ? null : 'boothList'" :eventId="eventId" />
+    <component :is="isLoading ? null : 'boothList'" :eventId="eventId" :currentBoothId="boothId"/>
   </v-container>
 </template>
 
@@ -17,6 +17,9 @@ export default {
   computed: {
     eventId() {
       return this.$route.params.eventId
+    },
+    boothId() {
+      return this.$route.params.boothId
     }
   },
   created() {

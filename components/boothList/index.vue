@@ -2,7 +2,7 @@
   <v-row>
     <template v-if="boothList.length">
       <v-carousel
-        v-model="currentBoothId"
+        v-model="currentBoothIndex"
         height="calc(100vh - 220px)"
         hide-delimiter-background
         hide-delimiters
@@ -19,13 +19,13 @@
                 height: 'calc(100vh - 220px)'
               }"
             >
-              <v-img :src="booth.data.image" style="height:100%"/>
+              <v-img :src="booth.data.image" style="height:100%" />
             </v-layout>
           </v-layout>
         </v-carousel-item>
       </v-carousel>
       <v-container style="margin-bottom:112px">
-        <boothHeader :boothId="boothList[currentBoothId].id"/>
+        <boothHeader :boothId="boothId" />
         <v-content>
           <v-tabs v-model="tab" grow>
             <v-tab class="title">頒布物</v-tab>
@@ -34,11 +34,11 @@
 
           <v-tabs-items v-model="tab">
             <v-tab-item>
-              <itemList :boothId="boothList[currentBoothId].id"/>
+              <itemList :boothId="boothId" />
             </v-tab-item>
 
             <v-tab-item>
-              <commentList :boothId="boothList[currentBoothId].id"/>
+              <commentList :boothId="boothId" />
             </v-tab-item>
           </v-tabs-items>
         </v-content>
@@ -47,7 +47,12 @@
       <v-footer fixed class="pa-0" color="#ffffff88">
         <v-content class="pa-0">
           <v-layout justify-center>
-            <v-slide-group v-model="currentBoothId" class="pa-4" mandatory center-active>
+            <v-slide-group
+              v-model="currentBoothIndex"
+              class="pa-4"
+              mandatory
+              center-active
+            >
               <v-slide-item
                 v-for="(booth, i) in boothList"
                 :key="i"
@@ -80,14 +85,18 @@
         <v-row align="center" justify="center">
           <v-card>
             <v-card-title>まだブースがありません。</v-card-title>
-            <v-card-text>ブースを作成して、イベントを盛り上げましょう！</v-card-text>
+            <v-card-text
+              >ブースを作成して、イベントを盛り上げましょう！</v-card-text
+            >
             <v-card-actions class="justify-center">
-              <v-btn large color="primary" @click="addBooth">ブースを作成する</v-btn>
+              <v-btn large color="primary" @click="addBooth"
+                >ブースを作成する</v-btn
+              >
             </v-card-actions>
           </v-card>
         </v-row>
       </v-content>
-      <loginDialog ref="loginDialog"/>
+      <loginDialog ref="loginDialog" />
     </template>
   </v-row>
 </template>
@@ -106,11 +115,17 @@ export default {
       type: String,
       required: false,
       default: null
+    },
+    currentBoothId: {
+      type: String,
+      required: false,
+      default: null
     }
   },
   data() {
     return {
-      currentBoothId: 0,
+      currentBoothIndex: 0,
+      boothId: null,
       tab: 0
     }
   },
@@ -122,7 +137,9 @@ export default {
     }
   },
   watch: {
-    currentBoothId() {
+    currentBoothIndex(val) {
+      this.boothId = this.boothList[val].id
+      history.replaceState('','',`/event/${this.eventId}/${this.boothId}`)
       window.scrollTo(0, 0)
     }
   },
@@ -131,10 +148,12 @@ export default {
   },
   methods: {
     init() {
-      if (this.$router.history.current.hash) {
-        this.currentBoothId = parseInt(
-          this.$router.history.current.hash.replace('#', '')
-        )
+      if (this.currentBoothId) {
+        const index = this.boothList.findIndex(item => item.id == this.currentBoothId)
+        if (index && index !== -1) {
+          this.currentBoothIndex = index
+          this.boothId = this.currentBoothId
+        }
       }
     },
     addBooth() {
