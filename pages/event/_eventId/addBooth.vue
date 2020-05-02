@@ -203,7 +203,8 @@ export default {
   },
   methods: {
     ...mapActions('account', ['onLogout']),
-    ...mapActions('event', ['createEvent', 'getEvent']),
+    ...mapActions('event', ['getEvent']),
+    ...mapActions('booth', ['createBooth']),
     init() {
       this.onLogout(() => {
         this.$router.push('/')
@@ -333,18 +334,17 @@ export default {
     async submit() {
       if (this.$refs.form.validate()) {
         this.isLoading = true
-        const eventData = {
+        const boothData = {
           concluded: {
-            name: this.name,
-            description: this.description,
-            tagList: this.tagList,
-            startDate: new Date(this.startDate + ' ' + this.startTime),
-            endDate: new Date(this.startDate + ' ' + this.endTime)
+            headerImageUrl: this.headerImageFile ? null : this.headerImageUrl,
+            wishListUrl: this.wishListUrl,
+            eventId: this.eventId
           },
-          imageFile: this.imageFile
+          headerImageFile: this.headerImageFile,
+          itemList: this.itemList
         }
-        const event = await this.createEvent(eventData)
-        this.$router.push('/event/' + event.id)
+        const booth = await this.createBooth(boothData)
+        this.isLoading = false
       }
     }
   }
