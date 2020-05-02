@@ -1,5 +1,5 @@
 import { pushObjectToList, getObjectFromList } from '~/plugins/functions'
-import Event from '~/plugins/firebase/store/event'
+import Event from '~/plugins/firebase/store/Event'
 import auth from '~/plugins/firebase/account/auth'
 
 export const state = () => ({

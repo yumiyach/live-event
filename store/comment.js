@@ -1,5 +1,5 @@
 import { pushObjectToList, getObjectFromList } from '~/plugins/functions'
-import Comment from '~/plugins/firebase/store/comment'
+import Comment from '~/plugins/firebase/store/Comment'
 import auth from '~/plugins/firebase/account/auth'
 
 export const state = () => ({

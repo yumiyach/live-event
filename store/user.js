@@ -1,5 +1,5 @@
 import { pushObjectToList, getObjectFromList } from '~/plugins/functions'
-import User from '~/plugins/firebase/store/user'
+import User from '~/plugins/firebase/store/User'
 
 export const state = () => ({
   userList: []
