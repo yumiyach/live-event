@@ -230,7 +230,7 @@ export default {
       this.isLoading = true
       try {
         const res = await axios.get(
-          'http://localhost:5000/mekepon-sort-d78fa/us-central1/getItemData',
+          'https://us-central1-mekepon-sort-d78fa.cloudfunctions.net/getItemData',
           {
             params: {
               url: this.addItemUrl
