@@ -41,7 +41,13 @@
             </v-card-text>
             <v-card-text>{{eventData.description}}</v-card-text>
             <v-card-actions>
-              <v-btn large color="primary" @click="addBooth">サークル参加する</v-btn>
+              <v-btn v-if="!myBooth" large color="primary" @click="addBooth">サークル参加</v-btn>
+              <v-btn
+                v-else
+                large
+                color="primary"
+                :to="`/event/${eventId}/${myBooth.id}/edit`"
+              >ブースを編集</v-btn>
               <v-spacer></v-spacer>
               <v-btn depressed @click="eventInfomationVisible = false">閉じる</v-btn>
             </v-card-actions>
@@ -68,13 +74,18 @@ export default {
     today: new Date()
   }),
   computed: {
-    ...mapState('account', ['isLogin', 'loginUser']),
+    ...mapState('account', ['isLogin', 'userId']),
     ...mapGetters('event', ['eventById']),
+    ...mapGetters('booth', ['boothListByEventId']),
     eventId() {
       return this.$route.params.eventId
     },
     eventData() {
       return this.eventById(this.eventId).data
+    },
+    myBooth() {
+      const boothList = this.boothListByEventId(this.eventId)
+      return boothList.find(item => item.data.userId === this.userId)
     },
     date() {
       if (!this.eventData.startDate || !this.eventData.endDate) {
