@@ -15,6 +15,7 @@
       </v-btn>
       <v-btn
         v-if="boothData.wishListUrl"
+        class="mx-1"
         fab
         dark
         small
@@ -24,13 +25,20 @@
       >
         <v-icon dark>mdi-gift</v-icon>
       </v-btn>
+      <v-btn
+        v-if="isMyBooth"
+        class="mx-1"
+        dark
+        color="primary"
+        :to="`/event/${boothData.eventId}/${boothId}/edit`"
+      >ブースを編集</v-btn>
     </div>
   </v-row>
 </template>
 
 
 <script>
-import { mapGetters, mapActions } from 'vuex'
+import { mapState, mapGetters, mapActions } from 'vuex'
 
 export default {
   props: {
@@ -43,11 +51,15 @@ export default {
   computed: {
     ...mapGetters('booth', ['boothById']),
     ...mapGetters('user', ['userById']),
+    ...mapState('account', ['userId']),
     boothData() {
       return this.boothById(this.boothId).data
     },
     userData() {
       return this.userById(this.boothData.userId).data
+    },
+    isMyBooth() {
+      return this.userId === this.boothData.userId
     }
   }
 }

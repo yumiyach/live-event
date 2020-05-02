@@ -26,7 +26,14 @@
                 <v-img :src="eventData.imageUrl" style="height:100%"/>
               </v-layout>
             </v-layout>
-            <v-card-title>{{eventData.name}}</v-card-title>
+            <v-card-title>
+              <span class="mr-3">{{eventData.name}}</span>
+              <v-btn
+                v-if="eventData.userId===userId"
+                color="primary"
+                :to="`/event/${eventId}/edit`"
+              >編集</v-btn>
+            </v-card-title>
             <v-card-text>
               <v-layout align-center class="mb-2" wrap>
                 <v-chip small class="mr-2" color="primary">主催</v-chip>

@@ -121,9 +121,11 @@
           </v-form>
         </v-card-text>
 
-        <v-card-actions class="pa-4 mx-auto" style="max-width:600px">
-          <v-btn x-large style="width:100%" color="accent" @click="submit" :loading="isLoading">
-            <v-icon left>mdi-check</v-icon>投稿する
+        <v-card-actions class="pa-4 mx-auto">
+          <v-btn large :to="`/event/${eventId}`">キャンセル</v-btn>
+          <v-spacer/>
+          <v-btn x-large color="accent" @click="submit">
+            <v-icon left>mdi-check</v-icon>編集する
           </v-btn>
         </v-card-actions>
       </v-card>
@@ -219,7 +221,6 @@ export default {
       this.onLogout(() => {
         this.$router.push('/')
       })
-      this.isLoading = true
       const event = await this.getEvent(this.eventId)
       this.name = event.data.name
       this.description = event.data.name
@@ -243,7 +244,6 @@ export default {
         ':' +
         ('00' + event.data.endDate.getMinutes()).slice(-2) +
         ':00'
-      this.isLoading = false
     },
     onFilePicked(e) {
       this.imageUrl = ''

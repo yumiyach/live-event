@@ -116,9 +116,11 @@
             </v-row>
           </v-form>
         </v-card-text>
-        <v-card-actions class="pa-4 mx-auto" style="max-width:600px">
-          <v-btn x-large style="width:100%" color="accent" @click="submit" :loading="isLoading">
-            <v-icon left>mdi-check</v-icon>出展する
+        <v-card-actions class="pa-4 mx-auto">
+          <v-btn large :to="`/event/${eventId}/${boothId}`">キャンセル</v-btn>
+          <v-spacer/>
+          <v-btn x-large color="accent" @click="submit" :loading="isLoading">
+            <v-icon left>mdi-check</v-icon>編集する
           </v-btn>
         </v-card-actions>
 
@@ -171,7 +173,7 @@ export default {
     }
   },
   data: () => ({
-    isLoading: true,
+    isLoading: false,
     addItemUrl: null,
     editLinkVisible: false,
     editLinkItemIndex: -1,
@@ -219,7 +221,6 @@ export default {
       for (const item of booth.data.itemList) {
         this.itemList.push({ ...item })
       }
-      this.isLoading = false
     },
     onHeaderImagePicked(e) {
       const file = e
