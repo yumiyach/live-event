@@ -28,6 +28,7 @@ export const actions = {
       commit('addUser', { ...user, notFound: false })
       user = new User(id)
       await user.ready
+      console.log(user)
       commit('addUser', user)
     }
     return user

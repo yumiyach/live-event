@@ -37,10 +37,9 @@ export const actions = {
     }
     return booth
   },
-  async getBoothListByEventId({ getters, commit }, eventId) {
-    console.log('getBoothListByEventId')
+  async getBoothListByEventId({ dispatch, commit }, eventId) {
     await boothList.getByEventId(eventId, booth => {
-      console.log(booth)
+      dispatch('user/getUser', booth.data.userId, { root: true })
       commit('addBooth', booth)
     })
   },

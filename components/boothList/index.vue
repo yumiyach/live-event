@@ -19,13 +19,13 @@
                 height: 'calc(100vh - 220px)'
               }"
             >
-              <v-img :src="booth.data.image" style="height:100%" />
+              <v-img :src="booth.data.headerImageUrl" style="height:100%"/>
             </v-layout>
           </v-layout>
         </v-carousel-item>
       </v-carousel>
       <v-container style="margin-bottom:112px">
-        <boothHeader :boothId="boothId" />
+        <boothHeader :boothId="boothList[currentBoothIndex].id"/>
         <v-content>
           <v-tabs v-model="tab" grow>
             <v-tab class="title">頒布物</v-tab>
@@ -34,11 +34,11 @@
 
           <v-tabs-items v-model="tab">
             <v-tab-item>
-              <itemList :boothId="boothId" />
+              <itemList :boothId="boothList[currentBoothIndex].id"/>
             </v-tab-item>
 
             <v-tab-item>
-              <commentList :boothId="boothId" />
+              <commentList :boothId="boothList[currentBoothIndex].id"/>
             </v-tab-item>
           </v-tabs-items>
         </v-content>
@@ -47,33 +47,13 @@
       <v-footer fixed class="pa-0" color="#ffffff88">
         <v-content class="pa-0">
           <v-layout justify-center>
-            <v-slide-group
-              v-model="currentBoothIndex"
-              class="pa-4"
-              mandatory
-              center-active
-            >
+            <v-slide-group v-model="currentBoothIndex" class="pa-4" mandatory center-active>
               <v-slide-item
                 v-for="(booth, i) in boothList"
                 :key="i"
                 v-slot:default="{ active, toggle }"
               >
-                <v-card class="mx-4" height="80" width="80" @click="toggle">
-                  <v-img :src="booth.data.image" aspect-ratio="1">
-                    <v-row
-                      class="fill-height caption"
-                      align="center"
-                      justify="center"
-                      :style="{
-                        backgroundColor: '#000',
-                        opacity: active ? 0 : 0.6,
-                        color: '#fff'
-                      }"
-                    >
-                      <v-col class="text-center">{{ booth.data.name }}</v-col>
-                    </v-row>
-                  </v-img>
-                </v-card>
+                <boothItem :boothId="booth.id" :active="active"/>
               </v-slide-item>
             </v-slide-group>
           </v-layout>
@@ -85,18 +65,14 @@
         <v-row align="center" justify="center">
           <v-card>
             <v-card-title>まだブースがありません。</v-card-title>
-            <v-card-text
-              >ブースを作成して、イベントを盛り上げましょう！</v-card-text
-            >
+            <v-card-text>ブースを作成して、イベントを盛り上げましょう！</v-card-text>
             <v-card-actions class="justify-center">
-              <v-btn large color="primary" @click="addBooth"
-                >ブースを作成する</v-btn
-              >
+              <v-btn large color="primary" @click="addBooth">ブースを作成する</v-btn>
             </v-card-actions>
           </v-card>
         </v-row>
       </v-content>
-      <loginDialog ref="loginDialog" />
+      <loginDialog ref="loginDialog"/>
     </template>
   </v-row>
 </template>
@@ -107,9 +83,10 @@ import loginDialog from '~/components/navBar/loginDialog'
 import boothHeader from '@/components/boothList/boothHeader'
 import itemList from '@/components/boothList/itemList'
 import commentList from '@/components/boothList/commentList'
+import boothItem from '@/components/boothList/boothItem'
 
 export default {
-  components: { boothHeader, itemList, commentList, loginDialog },
+  components: { boothHeader, itemList, commentList, loginDialog, boothItem },
   props: {
     eventId: {
       type: String,
@@ -139,7 +116,7 @@ export default {
   watch: {
     currentBoothIndex(val) {
       this.boothId = this.boothList[val].id
-      history.replaceState('','',`/event/${this.eventId}/${this.boothId}`)
+      history.replaceState('', '', `/event/${this.eventId}/${this.boothId}`)
       window.scrollTo(0, 0)
     }
   },
@@ -149,7 +126,9 @@ export default {
   methods: {
     init() {
       if (this.currentBoothId) {
-        const index = this.boothList.findIndex(item => item.id == this.currentBoothId)
+        const index = this.boothList.findIndex(
+          item => item.id == this.currentBoothId
+        )
         if (index && index !== -1) {
           this.currentBoothIndex = index
           this.boothId = this.currentBoothId

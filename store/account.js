@@ -22,9 +22,7 @@ export const mutations = {
 
 export const actions = {
   init({ commit }) {
-    console.log('init')
     auth.onLogin(() => {
-      console.log('login')
       commit('setAccount', auth)
       commit('setUserId', auth.userId)
     })
