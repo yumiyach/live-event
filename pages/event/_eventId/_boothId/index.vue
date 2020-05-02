@@ -1,6 +1,11 @@
 <template>
   <v-container fill-height>
-    <component :is="isLoading ? null : 'boothList'" :eventId="eventId" :currentBoothId="boothId"/>
+    <component
+      :is="isLoading ? null : 'boothList'"
+      :eventId="eventId"
+      :currentBoothId="boothId"
+      class="pt-0"
+    />
   </v-container>
 </template>
 

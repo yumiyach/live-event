@@ -1,5 +1,5 @@
 <template>
-  <v-card class="mx-4" height="80" width="80" @click="toggle">
+  <v-card class="mx-4" height="80" width="80">
     <v-img :src="boothData.headerImageUrl" aspect-ratio="1">
       <v-row
         class="fill-height caption"

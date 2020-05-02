@@ -41,6 +41,7 @@
             </v-card-text>
             <v-card-text>{{eventData.description}}</v-card-text>
             <v-card-actions>
+              <v-btn large color="primary" @click="addBooth">サークル参加する</v-btn>
               <v-spacer></v-spacer>
               <v-btn depressed @click="eventInfomationVisible = false">閉じる</v-btn>
             </v-card-actions>
@@ -130,10 +131,11 @@ export default {
     }
   },
   methods: {
-    submitSearch(validate) {
-      if (validate) {
-        this.$router.push('/search/tag/' + encodeURIComponent(this.search))
-        this.searchMenuVisible = false
+    addBooth() {
+      if (this.isLogin) {
+        this.$router.push(`/event/${this.eventId}/addBooth`)
+      } else {
+        this.$refs.loginDialog.open(`/event/${this.eventId}/addBooth`)
       }
     }
   }

@@ -1,10 +1,6 @@
 <template>
   <v-row class="mx-0 mt-4 align-center">
-    <v-layout class="display-1 mb-4" align-center>
-      <v-chip v-if="boothData.isOnline" class="ma-2" color="primary">在席中</v-chip>
-      <v-chip v-else class="ma-2" color="default">離席中</v-chip>
-      {{userData.displayName}}
-    </v-layout>
+    <v-layout class="display-1 mb-4" align-center>{{userData.displayName}}のブース</v-layout>
     <div class="ml-auto mb-4">
       <v-btn
         class="mx-1"

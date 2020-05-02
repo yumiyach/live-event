@@ -1,5 +1,5 @@
 <template>
-  <v-container fill-height>
+  <v-container fill-height class="pt-0">
     <component :is="isLoading ? null : 'boothList'" :eventId="eventId"/>
   </v-container>
 </template>
