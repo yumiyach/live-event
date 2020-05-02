@@ -23,7 +23,9 @@ exports.getItemData = functions.https.onRequest(async (request, response) => {
   const $ = cheerio.load(html)
 
   const result = {
-    title: $('title').text(),
+    title: $('title')
+      .text()
+      .replace(/^\s*|\s*$/gi, ''),
     imageUrl: $('meta[property="og:image"]').attr('content'),
     description: $('meta[property="og:description"]').attr('content'),
     siteName: $('meta[property="og:site_name"]').attr('content')

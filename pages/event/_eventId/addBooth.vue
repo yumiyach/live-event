@@ -11,19 +11,23 @@
           <v-icon large left color="accent">mdi-account</v-icon>
           『{{
           eventData.name
-          }}』に出展する
+          }}』にサークル参加する
         </v-card-title>
         <v-card-text>
           <v-form ref="form" lazy-validation @submit.prevent>
-            <v-file-input
-              :rules="imageRules"
-              @change="onFilePicked"
-              accept="image/*"
-              label="ヘッダー画像"
-            ></v-file-input>
+            <v-img v-if="headerImageUrl" :src="headerImageUrl" aspect-ratio="2"></v-img>
+            <v-file-input @change="onHeaderImagePicked" accept="image/*" label="ヘッダー画像"></v-file-input>
+            <v-text-field
+              v-model="name"
+              :counter="30"
+              class="mb-3"
+              dense
+              label="欲しいものリストURL"
+              outlined
+            ></v-text-field>
             <h2>頒布作品一覧</h2>
             <v-row>
-              <v-col v-for="(item, i) in itemList" :key="i" cols="12" sm="6">
+              <v-col v-for="(item, i) in itemList" :key="i" cols="12" xl="6">
                 <v-card>
                   <v-row class="ma-0">
                     <v-col class="pa-0">
@@ -78,11 +82,14 @@
                           >リンク追加</v-btn>
                         </v-row>
                       </v-card-text>
+                      <v-card-actions>
+                        <v-btn color="error" @click="deleteItem(i)">削除</v-btn>
+                      </v-card-actions>
                     </v-col>
                   </v-row>
                 </v-card>
               </v-col>
-              <v-col cols="12" sm="6">
+              <v-col cols="12" xl="6">
                 <v-card>
                   <v-card-title>作品を追加する</v-card-title>
                   <v-divider class="mx-4"></v-divider>
@@ -109,15 +116,6 @@
             </v-row>
           </v-form>
         </v-card-text>
-
-        <v-text-field
-          v-model="name"
-          :rules="nameRules"
-          :counter="30"
-          class="mb-3"
-          label="欲しいものリストURL"
-          outlined
-        ></v-text-field>
         <v-card-actions class="pa-4 mx-auto" style="max-width:600px">
           <v-btn x-large style="width:100%" color="accent" @click="submit" :loading="isLoading">
             <v-icon left>mdi-check</v-icon>出展する
@@ -137,6 +135,23 @@
               <v-btn color="error" @click="deleteLink">削除</v-btn>
               <v-btn color="primary" @click="updateLink">追加</v-btn>
             </v-card-actions>
+          </v-card>
+        </v-dialog>
+
+        <v-dialog v-model="isLoading" persistent max-width="290">
+          <v-card>
+            <v-card-title class="justify-center">処理中...</v-card-title>
+            <v-card-text>
+              <p class="text-center">
+                <v-progress-circular
+                  class="mx-auto"
+                  :size="70"
+                  :width="7"
+                  color="accent"
+                  indeterminate
+                ></v-progress-circular>
+              </p>
+            </v-card-text>
           </v-card>
         </v-dialog>
       </v-card>
@@ -163,9 +178,10 @@ export default {
     editLinkIndex: -1,
     editLinkUrl: null,
     editLinkText: null,
-    headerImage: null,
-    itemList: [],
-    wishListUrl: null
+    headerImageUrl: null,
+    headerImageFile: false,
+    wishListUrl: null,
+    itemList: []
   }),
   computed: {
     ...mapGetters('event', ['eventById']),
@@ -195,7 +211,22 @@ export default {
 
       this.getEvent(this.eventId)
     },
+    onHeaderImagePicked(e) {
+      const file = e
+      if (file !== undefined) {
+        const fr = new FileReader()
+        fr.readAsDataURL(file)
+        fr.addEventListener('load', () => {
+          this.headerImageUrl = fr.result
+          this.headerImageFile = file
+        })
+      } else {
+        this.headerImageUrl = null
+        this.headerImageFile = false
+      }
+    },
     async addItemByUrl() {
+      this.isLoading = true
       try {
         const res = await axios.get(
           'http://localhost:5000/mekepon-sort-d78fa/us-central1/getItemData',
@@ -221,6 +252,7 @@ export default {
       } catch (e) {
         alert('データ取得に失敗しました')
       }
+      this.isLoading = false
       this.addItemUrl = null
     },
     addItem() {
@@ -231,6 +263,9 @@ export default {
         imageFile: false,
         linkList: []
       })
+    },
+    deleteItem(itemIndex) {
+      this.itemList.splice(itemIndex, 1)
     },
     onItemImageClicked(ref) {
       this.$refs[ref][0].click()
@@ -294,30 +329,6 @@ export default {
       this.editLinkItemIndex = -1
       this.editLinkIndex = -1
       this.editLinkVisible = false
-    },
-    onFilePicked(e) {
-      const file = e
-      if (file !== undefined) {
-        const fr = new FileReader()
-        fr.readAsDataURL(file)
-        fr.addEventListener('load', () => {
-          this.imageUrl = fr.result
-          this.imageFile = file
-        })
-      } else {
-        this.imageFile = ''
-        this.imageUrl = ''
-      }
-    },
-    formatDate(date) {
-      if (!date) return null
-      const [year, month, day] = date.split('-')
-      return `${year}/${month}/${day}`
-    },
-    parseDate(date) {
-      if (!date) return null
-      const [year, month, day] = date.split('/')
-      return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`
     },
     async submit() {
       if (this.$refs.form.validate()) {
