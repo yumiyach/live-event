@@ -21,7 +21,7 @@
               accept="image/*"
               label="ヘッダー画像"
             ></v-file-input>
-            <h2>頒布物一覧</h2>
+            <h2>頒布作品一覧</h2>
             <v-row>
               <v-col v-for="(item, i) in itemList" :key="i" cols="12" sm="6">
                 <v-card>
@@ -60,19 +60,43 @@
                           :counter="500"
                         ></v-textarea>
                       </v-card-subtitle>
-                      <v-card-actions class="mt-auto">
-                        <v-btn small>リンク追加</v-btn>
-                        <v-btn
-                          v-for="(link, k) in item.linkList"
-                          :key="k"
-                          :href="link.url"
-                          target="_blank"
-                          small
-                          outlined
-                        >{{ link.text }}</v-btn>
-                      </v-card-actions>
+                      <v-card-text class="mt-auto">
+                        <v-row wrap>
+                          <v-btn
+                            v-for="(link, k) in item.linkList"
+                            :key="k"
+                            small
+                            outlined
+                            class="ma-1"
+                            @click="openEditLinkDialog(i,k)"
+                          >{{ link.text }}</v-btn>
+                          <v-btn
+                            class="ma-1"
+                            small
+                            color="primary"
+                            @click="openEditLinkDialog(i)"
+                          >リンク追加</v-btn>
+                        </v-row>
+                      </v-card-text>
                     </v-col>
                   </v-row>
+                </v-card>
+              </v-col>
+              <v-col v-for="(item, i) in itemList" :key="i" cols="12" sm="6">
+                <v-card>
+                  <v-card-title>作品を追加する</v-card-title>
+                  <v-card-text>
+                    <v-row wrap>
+                      <v-col cols="12">
+                        既に作品・通販ページがある場合
+                        <v-btn>URLから追加</v-btn>
+                      </v-col>
+                      <v-col cols="12">
+                        まだ公開されてない作品の場合
+                        <v-btn>作品データ作成</v-btn>
+                      </v-col>
+                    </v-row>
+                  </v-card-text>
                 </v-card>
               </v-col>
             </v-row>
@@ -92,6 +116,22 @@
             <v-icon left>mdi-check</v-icon>出展する
           </v-btn>
         </v-card-actions>
+
+        <v-dialog v-model="editLinkVisible" width="500" color="white">
+          <v-card>
+            <v-card-title primary-title style="position:sticky;top:0;z-index:1;">リンクを追加する</v-card-title>
+            <v-card-text>
+              <v-text-field dense v-model="editLinkUrl" label="URL" outlined></v-text-field>
+              <v-text-field dense v-model="editLinkText" label="テキスト" outlined></v-text-field>
+            </v-card-text>
+            <v-card-actions>
+              <v-btn @click="editLinkVisible = false">キャンセル</v-btn>
+              <v-spacer/>
+              <v-btn color="error" @click="deleteLink">削除</v-btn>
+              <v-btn color="primary" @click="updateLink">追加</v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
       </v-card>
     </v-content>
   </v-container>
@@ -109,6 +149,11 @@ export default {
   },
   data: () => ({
     isLoading: false,
+    editLinkVisible: false,
+    editLinkItemIndex: -1,
+    editLinkIndex: -1,
+    editLinkUrl: null,
+    editLinkText: null,
     headerImage: null,
     itemList: [
       {
@@ -116,7 +161,7 @@ export default {
         description: '',
         imageUrl: null,
         imageFile: false,
-        urlList: []
+        linkList: []
       }
     ],
     wishListUrl: null
@@ -166,6 +211,51 @@ export default {
         this.itemList[index].imageUrl = null
         this.itemList[index].imageFile = false
       }
+    },
+    openEditLinkDialog(itemIndex, linkIndex) {
+      this.editLinkUrl = null
+      this.editLinkText = null
+      if (itemIndex !== undefined && linkIndex == undefined) {
+        this.editLinkItemIndex = itemIndex
+        this.editLinkIndex = -1
+        this.editLinkVisible = true
+      } else if (itemIndex !== undefined && linkIndex !== undefined) {
+        this.editLinkItemIndex = itemIndex
+        this.editLinkIndex = linkIndex
+        this.editLinkUrl = this.itemList[itemIndex].linkList[linkIndex].url
+        this.editLinkText = this.itemList[itemIndex].linkList[linkIndex].text
+        this.editLinkVisible = true
+      } else {
+        this.editLinkItemIndex = -1
+        this.editLinkIndex = -1
+      }
+    },
+    updateLink() {
+      if (this.editLinkIndex == -1) {
+        this.itemList[this.editLinkItemIndex].linkList.push({
+          url: this.editLinkUrl,
+          text: this.editLinkText
+        })
+      } else {
+        this.itemList[this.editLinkItemIndex].linkList[this.editLinkIndex] = {
+          url: this.editLinkUrl,
+          text: this.editLinkText
+        }
+      }
+      this.editLinkItemIndex = -1
+      this.editLinkIndex = -1
+      this.editLinkVisible = false
+    },
+    deleteLink() {
+      if (this.editLinkIndex !== -1) {
+        this.itemList[this.editLinkItemIndex].linkList.splice(
+          this.editLinkIndex,
+          1
+        )
+      }
+      this.editLinkItemIndex = -1
+      this.editLinkIndex = -1
+      this.editLinkVisible = false
     },
     onFilePicked(e) {
       const file = e
