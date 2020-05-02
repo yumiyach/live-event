@@ -171,7 +171,7 @@ export default {
     }
   },
   data: () => ({
-    isLoading: false,
+    isLoading: true,
     addItemUrl: null,
     editLinkVisible: false,
     editLinkItemIndex: -1,
@@ -189,6 +189,9 @@ export default {
     eventId() {
       return this.$route.params.eventId
     },
+    boothId() {
+      return this.$route.params.boothId
+    },
     eventData() {
       return this.eventById(this.eventId).data
     }
@@ -204,13 +207,19 @@ export default {
   methods: {
     ...mapActions('account', ['onLogout']),
     ...mapActions('event', ['getEvent']),
-    ...mapActions('booth', ['createBooth']),
-    init() {
+    ...mapActions('booth', ['getBooth', 'updateBooth']),
+    async init() {
       this.onLogout(() => {
         this.$router.push('/')
       })
-
       this.getEvent(this.eventId)
+      const booth = await this.getBooth(this.boothId)
+      this.headerImageUrl = booth.data.headerImageUrl
+      this.wishListUrl = booth.data.wishListUrl
+      for (const item of booth.data.itemList) {
+        this.itemList.push({ ...item })
+      }
+      this.isLoading = false
     },
     onHeaderImagePicked(e) {
       const file = e
@@ -335,6 +344,7 @@ export default {
       if (this.$refs.form.validate()) {
         this.isLoading = true
         const boothData = {
+          boothId: this.boothId,
           concluded: {
             headerImageUrl: this.headerImageFile ? null : this.headerImageUrl,
             wishListUrl: this.wishListUrl,
@@ -343,7 +353,7 @@ export default {
           headerImageFile: this.headerImageFile,
           itemList: this.itemList
         }
-        const booth = await this.createBooth(boothData)
+        const booth = await this.updateBooth(boothData)
         this.isLoading = false
       }
     }

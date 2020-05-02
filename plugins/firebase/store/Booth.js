@@ -18,7 +18,6 @@ export default class Booth extends Document {
   }
 
   async create(data) {
-    console.log(data)
     if (this.id) {
       return
     }
@@ -41,8 +40,33 @@ export default class Booth extends Document {
       itemListFunc.push(this.createItemData(data.itemList[index], index))
     }
     const itemList = await Promise.all(itemListFunc)
-    console.log(itemList)
     await this.ref.update({
+      itemList: itemList
+    })
+    await this.getData()
+  }
+
+  async update(data) {
+    if (!this.id) {
+      return
+    }
+    if (data.headerImageFile) {
+      const headerImage = new BoothImage(
+        this.id + '/header',
+        data.headerImageFile
+      )
+      await headerImage.ready
+      this.ref.update({
+        headerImageUrl: headerImage.imageUrl
+      })
+    }
+    const itemListFunc = []
+    for (const index in data.itemList) {
+      itemListFunc.push(this.createItemData(data.itemList[index], index))
+    }
+    const itemList = await Promise.all(itemListFunc)
+    await this.ref.update({
+      ...data.concluded,
       itemList: itemList
     })
     await this.getData()

@@ -50,5 +50,11 @@ export const actions = {
     await booth.ready
     commit('addBooth', booth)
     return booth
+  },
+  async updateBooth({ commit, dispatch }, data) {
+    const booth = new Booth(data.boothId)
+    await booth.update(data)
+    commit('addBooth', booth)
+    return booth
   }
 }
