@@ -27,8 +27,10 @@ export default {
   },
   methods: {
     ...mapActions('event', ['getEvent']),
+    ...mapActions('booth', ['getBoothListByEventId']),
     init() {
       this.getEvent(this.eventId)
+      this.getBoothListByEventId(this.eventId)
       this.isLoading = false
     }
   }

@@ -1,6 +1,6 @@
 <template>
   <v-container fill-height>
-    <component :is="isLoading ? null : 'boothList'" :eventId="eventId" />
+    <component :is="isLoading ? null : 'boothList'" :eventId="eventId"/>
   </v-container>
 </template>
 
@@ -24,8 +24,10 @@ export default {
   },
   methods: {
     ...mapActions('event', ['getEvent']),
+    ...mapActions('booth', ['getBoothListByEventId']),
     init() {
       this.getEvent(this.eventId)
+      this.getBoothListByEventId(this.eventId)
       this.isLoading = false
     }
   }
