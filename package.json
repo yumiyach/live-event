@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@nuxtjs/pwa": "^3.0.0-0",
+    "axios": "^0.19.2",
     "firebase": "^7.14.1",
     "nuxt": "^2.0.0",
     "vuex-persistedstate": "^3.0.1"

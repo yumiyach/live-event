@@ -49,12 +49,12 @@
                           v-model="itemList[i].name"
                           :counter="50"
                           class="mb-3"
-                          label="タイトル"
+                          label="【必須】タイトル"
                         ></v-text-field>
                       </v-card-title>
                       <v-card-subtitle>
                         <v-textarea
-                          v-model="itemList[i].desctiption"
+                          v-model="itemList[i].description"
                           class="body-2"
                           label="説明文"
                           :counter="500"
@@ -82,20 +82,27 @@
                   </v-row>
                 </v-card>
               </v-col>
-              <v-col v-for="(item, i) in itemList" :key="i" cols="12" sm="6">
+              <v-col cols="12" sm="6">
                 <v-card>
                   <v-card-title>作品を追加する</v-card-title>
+                  <v-divider class="mx-4"></v-divider>
+                  <v-card-title>
+                    <div class="subtitle-1">すでに作品・通販ページがある場合</div>
+                  </v-card-title>
                   <v-card-text>
-                    <v-row wrap>
-                      <v-col cols="12">
-                        既に作品・通販ページがある場合
-                        <v-btn>URLから追加</v-btn>
-                      </v-col>
-                      <v-col cols="12">
-                        まだ公開されてない作品の場合
-                        <v-btn>作品データ作成</v-btn>
-                      </v-col>
-                    </v-row>
+                    <v-text-field dense v-model="addItemUrl" label="URL" outlined></v-text-field>
+                    <v-btn
+                      color="primary"
+                      @click="addItemByUrl"
+                      :disabled="addItemUrl==null"
+                    >URLから追加</v-btn>
+                  </v-card-text>
+                  <v-divider class="mx-4"></v-divider>
+                  <v-card-title>
+                    <div class="subtitle-1">まだ作品ページがない場合</div>
+                  </v-card-title>
+                  <v-card-text>
+                    <v-btn color="secondary" @click="addItem">作品データを作成</v-btn>
                   </v-card-text>
                 </v-card>
               </v-col>
@@ -139,6 +146,7 @@
 
 <script>
 import { mapState, mapActions, mapGetters } from 'vuex'
+import axios from 'axios'
 
 export default {
   components: {},
@@ -149,21 +157,14 @@ export default {
   },
   data: () => ({
     isLoading: false,
+    addItemUrl: null,
     editLinkVisible: false,
     editLinkItemIndex: -1,
     editLinkIndex: -1,
     editLinkUrl: null,
     editLinkText: null,
     headerImage: null,
-    itemList: [
-      {
-        name: '',
-        description: '',
-        imageUrl: null,
-        imageFile: false,
-        linkList: []
-      }
-    ],
+    itemList: [],
     wishListUrl: null
   }),
   computed: {
@@ -193,6 +194,43 @@ export default {
       })
 
       this.getEvent(this.eventId)
+    },
+    async addItemByUrl() {
+      try {
+        const res = await axios.get(
+          'http://localhost:5000/mekepon-sort-d78fa/us-central1/getItemData',
+          {
+            params: {
+              url: this.addItemUrl
+            }
+          }
+        )
+        const data = res.data
+        this.itemList.push({
+          name: data.title,
+          description: data.description,
+          imageUrl: data.imageUrl,
+          imageFile: false,
+          linkList: [
+            {
+              url: this.addItemUrl,
+              text: data.siteName ? data.siteName : '作品ページ'
+            }
+          ]
+        })
+      } catch (e) {
+        alert('データ取得に失敗しました')
+      }
+      this.addItemUrl = null
+    },
+    addItem() {
+      this.itemList.push({
+        name: '',
+        description: '',
+        imageUrl: null,
+        imageFile: false,
+        linkList: []
+      })
     },
     onItemImageClicked(ref) {
       this.$refs[ref][0].click()
