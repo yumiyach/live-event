@@ -264,6 +264,13 @@ export default {
       const [year, month, day] = date.split('/')
       return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`
     },
+    tagToken() {
+      const tagToken = {}
+      for (const tag of this.tagList) {
+        tagToken[tag] = true
+      }
+      return tagToken
+    },
     async submit() {
       if (this.$refs.form.validate()) {
         this.isLoading = true
@@ -272,6 +279,7 @@ export default {
           concluded: {
             name: this.name,
             description: this.description,
+            tagToken: this.tagToken(),
             tagList: this.tagList,
             startDate: new Date(this.startDate + ' ' + this.startTime),
             endDate: new Date(this.startDate + ' ' + this.endTime)

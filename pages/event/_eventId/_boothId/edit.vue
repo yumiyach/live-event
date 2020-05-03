@@ -24,6 +24,50 @@
               label="欲しいものリストURL"
               outlined
             ></v-text-field>
+            <v-combobox
+              v-model="tagList"
+              :items="tagListItem"
+              :search-input.sync="search"
+              :delimiters="[' ', '　', '\n']"
+              hide-selected
+              hint="カップリング名やシチュエーションを入力してください"
+              label="タグ"
+              multiple
+              persistent-hint
+              small-chips
+              class="mb-3"
+              color="primary"
+              :rules="tagRules"
+            >
+              <template v-slot:no-data>
+                <v-list-item>
+                  <v-list-item-content>
+                    <v-list-item-name>テキスト入力でタグを新規作成します。</v-list-item-name>
+                  </v-list-item-content>
+                </v-list-item>
+              </template>
+              <template v-slot:selection="{ attrs, item, parent, selected }">
+                <v-chip
+                  v-bind="attrs"
+                  :input-value="selected"
+                  outlined
+                  color="primary"
+                  class="mr-2 my-1"
+                >
+                  <v-icon small left>mdi-tag-outline</v-icon>
+                  {{ item }}
+                  <v-icon small right @click="parent.selectItem(item)">mdi-close</v-icon>
+                </v-chip>
+              </template>
+              <template v-slot:item="{ index, item }">
+                <template v-if="item">
+                  <v-chip outlined color="primary">
+                    <v-icon small left>mdi-tag-outline</v-icon>
+                    {{ item }}
+                  </v-chip>
+                </template>
+              </template>
+            </v-combobox>
             <h2>頒布作品一覧</h2>
             <v-row>
               <v-col v-for="(item, i) in itemList" :key="i" cols="12" xl="6">
@@ -178,7 +222,9 @@ export default {
     headerImageUrl: null,
     headerImageFile: false,
     wishListUrl: null,
-    itemList: []
+    itemList: [],
+    tagListItem: ['NL', 'BL', 'GL', 'パロディ'],
+    tagList: []
   }),
   computed: {
     ...mapGetters('event', ['eventById']),
@@ -336,6 +382,13 @@ export default {
       this.editLinkIndex = -1
       this.editLinkVisible = false
     },
+    tagToken() {
+      const tagToken = {}
+      for (const tag of this.tagList) {
+        tagToken[tag] = true
+      }
+      return tagToken
+    },
     async submit() {
       if (this.$refs.form.validate()) {
         this.isLoading = true
@@ -344,7 +397,9 @@ export default {
           concluded: {
             headerImageUrl: this.headerImageFile ? null : this.headerImageUrl,
             wishListUrl: this.wishListUrl,
-            eventId: this.eventId
+            eventId: this.eventId,
+            tagToken: this.tagToken(),
+            tagList: this.tagList
           },
           headerImageFile: this.headerImageFile,
           itemList: this.itemList
