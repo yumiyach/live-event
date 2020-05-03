@@ -1,5 +1,6 @@
 import { pushObjectToList, getObjectFromList } from '~/plugins/functions'
 import Event from '~/plugins/firebase/store/Event'
+import eventList from '~/plugins/firebase/store/eventList'
 import auth from '~/plugins/firebase/account/auth'
 
 export const state = () => ({
@@ -38,6 +39,11 @@ export const actions = {
       commit('addEvent', event)
     }
     return event
+  },
+  async getRecentlyEventList({ commit }) {
+    await eventList.getRecently(event => {
+      commit('addEvent', event)
+    })
   },
   async reloadEvent({ getters, commit }, id) {
     const event = new Event(id)
