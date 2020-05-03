@@ -18,14 +18,16 @@
     </v-list>
 
     <v-list>
-      <!--
+      <template v-if="isLogin">
+        <!--
       <v-divider/>
       <v-list-item nuxt to="/mypage">
         <v-list-item-title>マイページ</v-list-item-title>
       </v-list-item>
-      -->
+        -->
+      </template>
       <v-divider/>
-      <v-list-item nuxt to="/event/create">
+      <v-list-item @click="onPressCreateEvent">
         <v-list-item-title>イベント作成</v-list-item-title>
       </v-list-item>
       <v-divider/>
@@ -65,6 +67,15 @@ export default {
   components: { loginDialog, logoutDialog },
   computed: {
     ...mapState('account', ['isLogin', 'loginUser'])
+  },
+  methods: {
+    onPressCreateEvent() {
+      if (this.isLogin) {
+        this.$router.push(`/event/create`)
+      } else {
+        this.$refs.loginDialog.open(`/event/create`)
+      }
+    }
   }
 }
 </script>

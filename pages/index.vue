@@ -13,16 +13,13 @@
             style="line-height: 1;"
             :style="{fontSize:$vuetify.breakpoint.smAndDown?'32px':'60px'}"
           >ライブイベント</v-card-title>
-          <v-card-text class="text-center pb-6">ネットを使ってリモートライブ！</v-card-text>
+          <v-card-text class="text-center pb-6">リモートでイベントを楽しもう！</v-card-text>
           <v-card-actions class="pb-6">
             <v-spacer/>
-            <v-btn x-large color="primary">
-              <v-icon left>mdi-twitter</v-icon>ツイートする
-            </v-btn>
+            <v-btn x-large color="primary" @click="onPressCreateEvent">イベントを作成する</v-btn>
             <v-spacer/>
           </v-card-actions>
         </v-card>
-
         <v-row>
           <v-col v-for="(event, index) in eventList" :key="index" cols="12" md="6">
             <eventItem :eventId="event.id"/>
@@ -30,15 +27,17 @@
         </v-row>
       </v-content>
     </v-container>
+    <loginDialog ref="loginDialog"/>
   </div>
 </template>
 
 <script>
 import { mapState, mapActions } from 'vuex'
 import eventItem from '~/components/eventItem'
+import loginDialog from '~/components/navBar/loginDialog'
 
 export default {
-  components: { eventItem },
+  components: { eventItem, loginDialog },
   computed: {
     ...mapState('event', ['eventList'])
   },
@@ -49,6 +48,13 @@ export default {
     ...mapActions('event', ['getRecentlyEventList']),
     async init() {
       this.getRecentlyEventList(this.userId)
+    },
+    onPressCreateEvent() {
+      if (this.isLogin) {
+        this.$router.push(`/event/create`)
+      } else {
+        this.$refs.loginDialog.open(`/event/create`)
+      }
     }
   }
 }
