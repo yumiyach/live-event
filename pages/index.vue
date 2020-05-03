@@ -21,7 +21,13 @@
           </v-card-actions>
         </v-card>
         <v-row>
-          <v-col v-for="(event, index) in eventList" :key="index" cols="12" md="6">
+          <v-col
+            v-for="(event, index) in eventList"
+            :key="index"
+            cols="12"
+            md="6"
+            @click="$router.push('/event/'+event.id)"
+          >
             <eventItem :eventId="event.id"/>
           </v-col>
         </v-row>
@@ -39,6 +45,7 @@ import loginDialog from '~/components/navBar/loginDialog'
 export default {
   components: { eventItem, loginDialog },
   computed: {
+    ...mapState('account', ['isLogin']),
     ...mapState('event', ['eventList'])
   },
   created() {
