@@ -165,11 +165,6 @@ import axios from 'axios'
 
 export default {
   components: {},
-  head() {
-    return {
-      name: 'マイページ'
-    }
-  },
   data: () => ({
     isLoading: false,
     addItemUrl: null,

@@ -136,11 +136,6 @@ import { mapState, mapActions } from 'vuex'
 
 export default {
   components: {},
-  head() {
-    return {
-      name: 'マイページ'
-    }
-  },
   data: vm => ({
     name: '',
     description: '',
