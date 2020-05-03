@@ -8,7 +8,6 @@
         max-width="876"
       >
         <v-card-title class="display-1 accent--text">
-          <v-icon large left color="accent">mdi-account</v-icon>
           『{{
           eventData.name
           }}』にサークル参加する

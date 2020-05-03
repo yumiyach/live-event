@@ -7,9 +7,7 @@
         class="my-3 mx-auto"
         max-width="876"
       >
-        <v-card-title class="display-1 accent--text">
-          <v-icon large left color="accent">mdi-account</v-icon>イベント作成
-        </v-card-title>
+        <v-card-title class="display-1 accent--text">イベント作成</v-card-title>
         <v-card-text>
           <v-form ref="form" lazy-validation @submit.prevent>
             <v-text-field
