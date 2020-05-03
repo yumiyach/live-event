@@ -124,8 +124,9 @@
         <v-card-actions class="pa-4 mx-auto">
           <v-btn large :to="`/event/${eventId}`">キャンセル</v-btn>
           <v-spacer/>
+          <v-btn large color="error" @click="deleteThisEvent">イベント削除</v-btn>
           <v-btn x-large color="accent" @click="submit">
-            <v-icon left>mdi-check</v-icon>編集する
+            <v-icon left>mdi-check</v-icon>編集
           </v-btn>
         </v-card-actions>
       </v-card>
@@ -211,7 +212,7 @@ export default {
   },
   methods: {
     ...mapActions('account', ['onLogout']),
-    ...mapActions('event', ['getEvent', 'updateEvent']),
+    ...mapActions('event', ['getEvent', 'updateEvent', 'deleteEvent']),
     async init() {
       this.onLogout(() => {
         this.$router.push('/')
@@ -284,6 +285,14 @@ export default {
         const event = await this.updateEvent(eventData)
         this.isLoading = false
         this.$router.push('/event/' + event.id)
+      }
+    },
+    async deleteThisEvent() {
+      if (window.confirm('削除しますか？')) {
+        this.isLoading = true
+        const event = await this.deleteEvent(this.eventId)
+        this.isLoading = false
+        this.$router.push('/')
       }
     }
   }

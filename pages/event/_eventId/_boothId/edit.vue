@@ -119,6 +119,7 @@
         <v-card-actions class="pa-4 mx-auto">
           <v-btn large :to="`/event/${eventId}/${boothId}`">キャンセル</v-btn>
           <v-spacer/>
+          <v-btn large color="error" @click="deleteThisBooth">ブース削除</v-btn>
           <v-btn x-large color="accent" @click="submit" :loading="isLoading">
             <v-icon left>mdi-check</v-icon>編集する
           </v-btn>
@@ -204,7 +205,7 @@ export default {
   methods: {
     ...mapActions('account', ['onLogout']),
     ...mapActions('event', ['getEvent']),
-    ...mapActions('booth', ['getBooth', 'updateBooth']),
+    ...mapActions('booth', ['getBooth', 'updateBooth', 'deleteBooth']),
     async init() {
       this.onLogout(() => {
         this.$router.push('/')
@@ -351,6 +352,14 @@ export default {
         }
         const booth = await this.updateBooth(boothData)
         this.isLoading = false
+      }
+    },
+    async deleteThisBooth() {
+      if (window.confirm('削除しますか？')) {
+        this.isLoading = true
+        await this.deleteBooth(this.boothId)
+        this.isLoading = false
+        this.$router.push('/event/' + this.eventId)
       }
     }
   }

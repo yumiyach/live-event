@@ -56,5 +56,9 @@ export const actions = {
     await booth.update(data)
     commit('addBooth', booth)
     return booth
+  },
+  async deleteBooth({ commit, dispatch }, boothId) {
+    const booth = new Booth(boothId)
+    await booth.delete()
   }
 }

@@ -1,4 +1,8 @@
-import { pushObjectToList, getObjectFromList } from '~/plugins/functions'
+import {
+  pushObjectToList,
+  getObjectFromList,
+  deleteFromList
+} from '~/plugins/functions'
 import Event from '~/plugins/firebase/store/Event'
 import eventList from '~/plugins/firebase/store/eventList'
 import auth from '~/plugins/firebase/account/auth'
@@ -16,6 +20,9 @@ export const mutations = {
       event.data.endDate = event.data.endDate.toDate()
     }
     pushObjectToList(state.eventList, event)
+  },
+  deleteCard(state, eventId) {
+    deleteFromList(state.eventList, eventId)
   }
 }
 
@@ -66,5 +73,9 @@ export const actions = {
     commit('addCard', event)
     await dispatch('reloadEvent', data.eventId)
     return event
+  },
+  async deleteEvent({ commit, dispatch }, eventId) {
+    const event = new Event(eventId)
+    await event.delete()
   }
 }
