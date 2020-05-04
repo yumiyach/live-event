@@ -74,8 +74,13 @@
               label="イベントの説明文"
               :counter="500"
             ></v-textarea>
-            <v-img :src="imageUrl"/>
-            <v-file-input :rules="imageRules" @change="onFilePicked" accept="image/*" label="トップ画像"></v-file-input>
+            <v-img v-if="imageUrl" :src="imageUrl" aspect-ratio="2"/>
+            <v-file-input
+              :rules="imageRules"
+              @change="onFilePicked"
+              accept="image/*"
+              label="ヘッダー画像"
+            ></v-file-input>
             <v-row>
               <v-col cols="12" sm="4">
                 <v-menu
@@ -163,8 +168,8 @@ export default {
       }
     ],
     imageRules: [
-      value =>
-        !value || value.size < 2000000 || '画像サイズは2MBいかにしてください。'
+      value => value || 'ヘッダー画像は必須です。',
+      value => value.size < 2000000 || '画像サイズは2MBいかにしてください。'
     ],
     startDate: new Date().toISOString().substr(0, 10),
     startDateFormatted: vm.formatDate(new Date().toISOString().substr(0, 10)),
