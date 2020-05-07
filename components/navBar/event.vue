@@ -23,18 +23,7 @@
         </v-btn>
         <v-dialog v-model="eventInfomationVisible" max-width="1000px">
           <v-card>
-            <v-layout wrap>
-              <v-layout
-                justify-center
-                align-center
-                wrap
-                :style="{
-                  height: 'calc(100vh - 220px)'
-                }"
-              >
-                <v-img :src="eventData.headerImageUrl" style="height:100%" />
-              </v-layout>
-            </v-layout>
+            <v-img :src="eventData.headerImageUrl" />
             <v-card-title class="d-flex">
               <span class="mr-3">{{ eventData.name }}</span>
               <div class="ml-auto">

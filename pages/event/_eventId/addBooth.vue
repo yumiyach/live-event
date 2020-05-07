@@ -25,7 +25,6 @@
             ></v-file-input>
             <v-text-field
               v-model="wishListUrl"
-              :counter="30"
               class="mb-3"
               dense
               label="欲しいものリストURL"
