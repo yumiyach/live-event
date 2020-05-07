@@ -339,6 +339,7 @@ export default {
         }
         const booth = await this.createBooth(boothData)
         this.isLoading = false
+        this.$router.push('/event/' + this.eventId)
       }
     }
   }

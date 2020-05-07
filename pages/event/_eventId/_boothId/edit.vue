@@ -406,6 +406,7 @@ export default {
         }
         const booth = await this.updateBooth(boothData)
         this.isLoading = false
+        this.$router.push('/event/' + this.eventId)
       }
     },
     async deleteThisBooth() {
