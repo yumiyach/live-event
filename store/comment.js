@@ -3,26 +3,14 @@ import Comment from '~/plugins/firebase/store/Comment'
 import auth from '~/plugins/firebase/account/auth'
 
 export const state = () => ({
-  commentList: [
-    {
-      id: '1',
-      data: {
-        eventId: '1',
-        boothId: '1',
-        userId: '1',
-        user: {
-          name: 'テストユーザ'
-        },
-        comment: 'テスト',
-        date: new Date(),
-        isAnonymous: false
-      }
-    }
-  ]
+  commentList: []
 })
 
 export const mutations = {
   addComment(state, comment) {
+    if (comment.data.createdAt && comment.data.createdAt.toDate) {
+      comment.data.createdAt = comment.data.createdAt.toDate()
+    }
     pushObjectToList(state.commentList, comment)
   }
 }
@@ -51,8 +39,9 @@ export const actions = {
     }
     return comment
   },
-  async createComment({ commit, dispatch }, data) {
-    data.concluded.userId = auth.userId
+  async createComment({ commit }, data) {
+    data.userId = auth.userId
+    data.createdAt = new Date()
     const comment = new Comment(data)
     await comment.ready
     commit('addComment', comment)

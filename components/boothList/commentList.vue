@@ -1,55 +1,103 @@
 <template>
-  <v-list three-line>
-    <v-list-item v-if="sessionState===0">
-      <v-list-item-content>
-        <div>
-          <v-text-field label="名前"></v-text-field>
-          <v-textarea name="input-7-1" label="メッセージ" rows="3"></v-textarea>
-        </div>
-        <v-btn depressed small color="primary">投稿</v-btn>
-      </v-list-item-content>
-    </v-list-item>
-    <v-list-item v-if="sessionState===1">
-      <v-list-item-content>イベントが終了しているため、新規コメントは投稿できません。</v-list-item-content>
-    </v-list-item>
-    <v-list-item v-if="sessionState===-1">
-      <v-list-item-content>イベント開催期間中のみコメントが投稿できます。</v-list-item-content>
-    </v-list-item>
-    <v-divider/>
-    <template v-if="sessionState===0|sessionState===1">
-      <div v-for="(item, i) in commentList" :key="i">
-        <v-list-item>
+  <v-row>
+    <v-col cols="12" md="6">
+      <v-list>
+        <v-list-item v-if="sessionState === 0 && isLogin">
           <v-list-item-content>
-            <p class="mb-2">{{ item.data.comment }}</p>
-            <v-list-item-subtitle class="d-flex">
-              <div class="mr-2">{{ item.data.user.name }}</div>
-              <div class="shrink ml-auto">
-                {{ item.data.date.getFullYear() }}/{{
-                item.data.date.getMonth() + 1
-                }}/{{ item.data.date.getDate() }}
-                {{ item.data.date.getHours() }}:{{
-                item.data.date.getMinutes()
-                }}:{{ item.data.date.getSeconds() }}
-              </div>
-            </v-list-item-subtitle>
+            <div>
+              <v-form ref="form" lazy-validation @submit.prevent>
+                <v-textarea
+                  v-model="commentText"
+                  label="コメント"
+                  rows="3"
+                  :rules="[
+                    v => !!v || 'コメント文は必須です',
+                    v =>
+                      (v && Array.from(v).length <= 1000) ||
+                      'コメントは1000文字以内にしてください。'
+                  ]"
+                ></v-textarea>
+              </v-form>
+            </div>
+            <v-btn depressed color="primary" :loading="isLoading" @click="post"
+              >投稿</v-btn
+            >
           </v-list-item-content>
         </v-list-item>
-        <v-divider/>
-      </div>
-      <v-list-item v-if="commentList.length">
-        <v-list-item-content>
-          <p class="mb-2">メッセージは以上です</p>
-        </v-list-item-content>
-      </v-list-item>
-    </template>
-  </v-list>
+        <v-list-item v-if="sessionState === 0 && !isLogin">
+          <v-list-item-content>
+            <v-row>
+              <v-col class="text-center" cols="12">
+                コメントを投稿するにはログインが必要です。
+              </v-col>
+              <v-col class="text-center" cols="12">
+                <v-btn
+                  color="primary"
+                  @click="$refs.loginDialog.visible = true"
+                >
+                  <v-icon left>mdi-login</v-icon>ログイン
+                </v-btn>
+              </v-col>
+            </v-row>
+            <loginDialog ref="loginDialog" />
+          </v-list-item-content>
+        </v-list-item>
+        <v-list-item v-if="sessionState === 1">
+          <v-list-item-content
+            >イベントが終了しているため、新規コメントは投稿できません。</v-list-item-content
+          >
+        </v-list-item>
+        <v-list-item v-if="sessionState === -1">
+          <v-list-item-content
+            >イベント開催期間中のみコメントが投稿できます。</v-list-item-content
+          >
+        </v-list-item>
+        <v-divider />
+      </v-list>
+    </v-col>
+    <v-col cols="12" md="6">
+      <v-list three-line>
+        <template v-if="(sessionState === 0) | (sessionState === 1)">
+          <div v-for="(item, i) in commentList" :key="i">
+            <v-list-item>
+              <v-list-item-content>
+                <p class="mb-2">{{ item.data.comment }}</p>
+                <v-list-item-subtitle class="d-flex align-end">
+                  <userItem class="mr-2" :userId="item.data.userId"/>
+                  <div class="shrink ml-auto">
+                    {{ item.data.createdAt.getFullYear() }}/{{
+                      item.data.createdAt.getMonth() + 1
+                    }}/{{ item.data.createdAt.getDate() }}
+                    {{ item.data.createdAt.getHours() }}:{{
+                      item.data.createdAt.getMinutes()
+                    }}:{{ item.data.createdAt.getSeconds() }}
+                  </div>
+                </v-list-item-subtitle>
+              </v-list-item-content>
+            </v-list-item>
+            <v-divider />
+          </div>
+          <v-list-item>
+            <v-list-item-content v-if="commentList.length">
+              <p class="mb-2">コメントは以上です</p>
+            </v-list-item-content>
+            <v-list-item-content v-else-if="sessionState === 0 && isLogin">
+              <p class="mb-2">コメントを投稿しましょう！</p>
+            </v-list-item-content>
+          </v-list-item>
+        </template>
+      </v-list>
+    </v-col>
+  </v-row>
 </template>
 
-
 <script>
-import { mapGetters, mapActions } from 'vuex'
+import { mapState, mapGetters, mapActions } from 'vuex'
+import loginDialog from '~/components/navBar/loginDialog'
+import userItem from '~/components/userItem'
 
 export default {
+  components: { loginDialog ,userItem},
   props: {
     boothId: {
       type: String,
@@ -57,7 +105,12 @@ export default {
       default: null
     }
   },
+  data: () => ({
+    isLoading: false,
+    commentText: ''
+  }),
   computed: {
+    ...mapState('account', ['isLogin']),
     ...mapGetters('comment', ['commentListByBoothId']),
     ...mapGetters('booth', ['boothById']),
     ...mapGetters('event', ['eventById']),
@@ -83,6 +136,21 @@ export default {
     },
     commentList() {
       return this.commentListByBoothId(this.boothId)
+    }
+  },
+  methods: {
+    ...mapActions('comment', ['createComment']),
+    async post() {
+      if (this.$refs.form.validate()) {
+        this.isLoading = true
+        await this.createComment({
+          comment: this.commentText,
+          boothId: this.boothId,
+          eventId: this.boothData.eventId
+        })
+        this.$refs.form.reset()
+        this.isLoading = false
+      }
     }
   }
 }
