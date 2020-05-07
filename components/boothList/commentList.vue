@@ -63,14 +63,9 @@
               <v-list-item-content>
                 <p class="mb-2">{{ item.data.comment }}</p>
                 <v-list-item-subtitle class="d-flex align-end">
-                  <userItem class="mr-2" :userId="item.data.userId"/>
+                  <userItem class="mr-2" :userId="item.data.userId" />
                   <div class="shrink ml-auto">
-                    {{ item.data.createdAt.getFullYear() }}/{{
-                      item.data.createdAt.getMonth() + 1
-                    }}/{{ item.data.createdAt.getDate() }}
-                    {{ item.data.createdAt.getHours() }}:{{
-                      item.data.createdAt.getMinutes()
-                    }}:{{ item.data.createdAt.getSeconds() }}
+                    {{ item.data.createdAt | date }}
                   </div>
                 </v-list-item-subtitle>
               </v-list-item-content>
@@ -97,7 +92,7 @@ import loginDialog from '~/components/navBar/loginDialog'
 import userItem from '~/components/userItem'
 
 export default {
-  components: { loginDialog ,userItem},
+  components: { loginDialog, userItem },
   props: {
     boothId: {
       type: String,
@@ -138,8 +133,14 @@ export default {
       return this.commentListByBoothId(this.boothId)
     }
   },
+  created() {
+    this.init()
+  },
   methods: {
-    ...mapActions('comment', ['createComment']),
+    ...mapActions('comment', ['createComment', 'listenCommentByBoothId']),
+    init() {
+      this.listenCommentByBoothId(this.boothId)
+    },
     async post() {
       if (this.$refs.form.validate()) {
         this.isLoading = true
@@ -151,6 +152,26 @@ export default {
         this.$refs.form.reset()
         this.isLoading = false
       }
+    }
+  },
+  filters: {
+    date(date) {
+      if (!date) {
+        return ''
+      }
+      return (
+        date.getFullYear() +
+        '/' +
+        ('00' + (date.getMonth() + 1)).slice(-2) +
+        '/' +
+        ('00' + date.getDate()).slice(-2) +
+        ' ' +
+        ('00' + date.getHours()).slice(-2) +
+        ':' +
+        ('00' + date.getMinutes()).slice(-2) +
+        ':' +
+        ('00' + date.getSeconds()).slice(-2)
+      )
     }
   }
 }

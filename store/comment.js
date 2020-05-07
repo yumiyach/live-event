@@ -1,5 +1,6 @@
 import { pushObjectToList, getObjectFromList } from '~/plugins/functions'
 import Comment from '~/plugins/firebase/store/Comment'
+import commentList from '~/plugins/firebase/store/commentList'
 import auth from '~/plugins/firebase/account/auth'
 
 export const state = () => ({
@@ -17,7 +18,11 @@ export const mutations = {
 
 export const getters = {
   commentListByBoothId: state => boothId => {
-    return state.commentList.filter(item => item.data.boothId === boothId)
+    return state.commentList
+      .filter(item => item.data.boothId === boothId)
+      .sort((a, b) => {
+        return a.data.createdAt.getTime() < b.data.createdAt.getTime() ? 1 : -1
+      })
   },
   commentById: state => commentId => {
     return getObjectFromList(state.commentList, commentId, {
@@ -38,6 +43,11 @@ export const actions = {
       commit('addComment', comment)
     }
     return comment
+  },
+  async listenCommentByBoothId({ dispatch, commit }, boothId) {
+    await commentList.listenByBoothId(boothId, comment => {
+      commit('addComment', comment)
+    })
   },
   async createComment({ commit }, data) {
     data.userId = auth.userId
