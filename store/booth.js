@@ -34,12 +34,13 @@ export const getters = {
 }
 
 export const actions = {
-  async getBooth({ getters, commit }, id) {
+  async getBooth({ getters, commit, dispatch }, id) {
     let booth = getters.boothById(id)
     if (booth.notFound) {
       commit('addBooth', booth)
       booth = new Booth(id)
       await booth.ready
+      dispatch('user/getUser', booth.data.userId, { root: true })
       commit('addBooth', booth)
     }
     return booth

@@ -41,17 +41,19 @@ export const getters = {
 }
 
 export const actions = {
-  async getComment({ getters, commit }, id) {
+  async getComment({ getters, commit, dispatch }, id) {
     let comment = getters.commentById(id)
     if (comment.notFound) {
       commit('addComment', comment)
       comment = new Comment(id)
       await comment.ready
+      dispatch('user/getUser', comment.data.userId, { root: true })
       commit('addComment', comment)
     }
     return comment
   },
   async listenCommentByBoothId({ dispatch, commit }, boothId) {
+    console.log('listenCommentByBoothId')
     await commentList.listenByBoothId(
       boothId,
       comment => {

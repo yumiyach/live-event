@@ -37,7 +37,7 @@ export const getters = {
 }
 
 export const actions = {
-  async getEvent({ getters, commit }, id) {
+  async getEvent({ getters, commit, dispatch }, id) {
     let event = getters.eventById(id)
     if (event.notFound) {
       commit('addEvent', event)

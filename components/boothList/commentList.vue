@@ -55,35 +55,38 @@
         <v-divider />
       </v-list>
     </v-col>
+
     <v-col cols="12" md="6">
       <v-list three-line>
-        <template v-if="(sessionState === 0) | (sessionState === 1)">
-          <div v-for="(item, i) in commentList" :key="i">
-            <v-list-item>
-              <v-list-item-content>
-                <p class="mb-2">{{ item.data.comment }}</p>
-                <v-list-item-subtitle class="d-flex align-end">
-                  <userItem class="mr-2" :userId="item.data.userId" />
-                  <div class="shrink ml-auto">
-                    {{ item.data.createdAt | date }}
-                  </div>
-                  <v-icon v-if="userId === item.data.userId" class="ml-2" small @click="deleteThisComment(item.id)"
-                    >mdi-delete</v-icon
-                  >
-                </v-list-item-subtitle>
-              </v-list-item-content>
-            </v-list-item>
-            <v-divider />
-          </div>
+        <div v-for="(item, i) in commentList" :key="i">
           <v-list-item>
-            <v-list-item-content v-if="commentList.length">
-              <p class="mb-2">コメントは以上です</p>
-            </v-list-item-content>
-            <v-list-item-content v-else-if="sessionState === 0 && isLogin">
-              <p class="mb-2">コメントを投稿しましょう！</p>
+            <v-list-item-content>
+              <p class="mb-2">{{ item.data.comment }}</p>
+              <v-list-item-subtitle class="d-flex align-end">
+                <userItem class="mr-2" :userId="item.data.userId" />
+                <div class="shrink ml-auto">
+                  {{ item.data.createdAt | date }}
+                </div>
+                <v-icon
+                  v-if="userId === item.data.userId"
+                  class="ml-2"
+                  small
+                  @click="deleteThisComment(item.id)"
+                  >mdi-delete</v-icon
+                >
+              </v-list-item-subtitle>
             </v-list-item-content>
           </v-list-item>
-        </template>
+          <v-divider />
+        </div>
+        <v-list-item>
+          <v-list-item-content v-if="sessionState === 0 && commentList.length">
+            <p class="mb-2">コメントは以上です</p>
+          </v-list-item-content>
+          <v-list-item-content v-else-if="sessionState === 0 && isLogin">
+            <p class="mb-2">コメントを投稿しましょう！</p>
+          </v-list-item-content>
+        </v-list-item>
       </v-list>
     </v-col>
   </v-row>
@@ -108,7 +111,7 @@ export default {
     commentText: ''
   }),
   computed: {
-    ...mapState('account', ['isLogin','userId']),
+    ...mapState('account', ['isLogin', 'userId']),
     ...mapGetters('comment', ['commentListByBoothId']),
     ...mapGetters('booth', ['boothById']),
     ...mapGetters('event', ['eventById']),
