@@ -115,6 +115,7 @@
                           :counter="50"
                           class="mb-3"
                           label="【必須】タイトル"
+                          required
                         ></v-text-field>
                       </v-card-title>
                       <v-card-subtitle>

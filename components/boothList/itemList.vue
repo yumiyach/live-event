@@ -4,7 +4,7 @@
       <v-card>
         <v-row class="ma-0">
           <v-col class="pa-0" cols="12" sm="6">
-            <v-img style="height:100%" :src="item.imageUrl" aspect-ratio="0.707"/>
+            <v-img style="height:100%" :src="item.imageUrl ? item.imageUrl : require('~/assets/images/no_image.png')" aspect-ratio="0.707"/>
           </v-col>
           <v-col class="pa-0" cols="12" sm="6" style="display: flex;flex-direction: column;">
             <v-card-title>{{item.name}}</v-card-title>

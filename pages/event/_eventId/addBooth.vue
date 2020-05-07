@@ -21,7 +21,7 @@
               @change="onHeaderImagePicked"
               accept="image/*"
               label="【必須】ヘッダー画像"
-              :rules="headerImageRules"
+              :rules="imageRules"
             ></v-file-input>
             <v-text-field
               v-model="wishListUrl"
@@ -114,7 +114,7 @@
                           v-model="itemList[i].name"
                           :counter="50"
                           class="mb-3"
-                          label="【必須】タイトル"
+                          label="タイトル"
                           required
                         ></v-text-field>
                       </v-card-title>

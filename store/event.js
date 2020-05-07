@@ -21,7 +21,7 @@ export const mutations = {
     }
     pushObjectToList(state.eventList, event)
   },
-  deleteCard(state, eventId) {
+  deleteEvent(state, eventId) {
     deleteFromList(state.eventList, eventId)
   }
 }
@@ -70,12 +70,13 @@ export const actions = {
     const event = new Event(data.eventId)
     await event.ready
     await event.update(data)
-    commit('addCard', event)
+    commit('addEvent', event)
     await dispatch('reloadEvent', data.eventId)
     return event
   },
   async deleteEvent({ commit, dispatch }, eventId) {
     const event = new Event(eventId)
+    commit('deleteEvent', eventId)
     await event.delete()
   }
 }
