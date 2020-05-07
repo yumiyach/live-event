@@ -25,7 +25,6 @@
             ></v-file-input>
             <v-text-field
               v-model="wishListUrl"
-              :counter="30"
               class="mb-3"
               dense
               label="欲しいものリストURL"
@@ -341,6 +340,7 @@ export default {
       const booth = await this.getBooth(this.boothId)
       this.headerImageUrl = booth.data.headerImageUrl
       this.wishListUrl = booth.data.wishListUrl
+      this.tagList = booth.data.tagList
       for (const item of booth.data.itemList) {
         this.itemList.push({ ...item })
       }

@@ -92,9 +92,12 @@
             </v-card-text>
             <v-card-text>{{ eventData.description }}</v-card-text>
             <v-card-actions>
-              <v-btn v-if="!myBooth" large color="primary" @click="addBooth"
-                >サークル参加</v-btn
-              >
+              <div v-if="!myBooth">
+                <v-btn large color="primary" @click="addBooth"
+                  >サークル参加</v-btn
+                >
+                <loginDialog ref="loginDialog" />
+              </div>
               <v-btn
                 v-else
                 large
@@ -121,11 +124,12 @@
 import drawerMenu from '~/components/navBar/drawerMenu'
 import userItem from '~/components/userItem'
 import share from '~/components/mixins/share'
+import loginDialog from '~/components/navBar/loginDialog'
 import { mapState, mapActions, mapGetters } from 'vuex'
 
 export default {
   mixins: [share],
-  components: { drawerMenu, userItem },
+  components: { drawerMenu, userItem, loginDialog },
   data: () => ({
     eventInfomationVisible: true,
     drawer: false,

@@ -43,6 +43,7 @@ export const actions = {
       commit('addEvent', event)
       event = new Event(id)
       await event.ready
+      dispatch('user/getUser', event.data.userId, { root: true })
       commit('addEvent', event)
     }
     return event

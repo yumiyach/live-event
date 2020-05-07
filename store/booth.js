@@ -46,6 +46,7 @@ export const actions = {
   },
   async getBoothListByEventId({ dispatch, commit }, eventId) {
     await boothList.getByEventId(eventId, booth => {
+      dispatch('user/getUser', booth.data.userId, { root: true })
       commit('addBooth', booth)
     })
   },

@@ -16,17 +16,17 @@
                 align-center
                 wrap
                 :style="{
-                height: 'calc(100vh - 220px)'
-              }"
+                  height: 'calc(100vh - 220px)'
+                }"
               >
-                <v-img :src="booth.data.headerImageUrl" style="height:100%"/>
+                <v-img :src="booth.data.headerImageUrl" style="height:100%" />
               </v-layout>
             </v-layout>
           </v-carousel-item>
         </v-carousel>
       </div>
       <div style="margin-bottom:112px">
-        <boothHeader :boothId="boothList[currentBoothIndex].id"/>
+        <boothHeader :boothId="boothList[currentBoothIndex].id" />
         <v-tabs v-model="tab" grow>
           <v-tab class="title">頒布物</v-tab>
           <v-tab class="title">コメント</v-tab>
@@ -34,25 +34,30 @@
 
         <v-tabs-items v-model="tab">
           <v-tab-item>
-            <itemList :boothId="boothList[currentBoothIndex].id"/>
+            <itemList :boothId="boothList[currentBoothIndex].id" />
           </v-tab-item>
 
           <v-tab-item>
-            <commentList :boothId="boothList[currentBoothIndex].id"/>
+            <commentList :boothId="boothList[currentBoothIndex].id" />
           </v-tab-item>
         </v-tabs-items>
       </div>
       <v-footer fixed class="pa-0" color="#ffffff88">
         <v-content class="pa-0">
           <v-layout justify-center>
-            <v-slide-group v-model="currentBoothIndex" class="pa-4" mandatory center-active>
+            <v-slide-group
+              v-model="currentBoothIndex"
+              class="pa-4"
+              mandatory
+              center-active
+            >
               <v-slide-item
                 v-for="(booth, i) in boothList"
                 :key="i"
                 v-slot:default="{ active, toggle }"
               >
                 <div @click="toggle">
-                  <boothItem :boothId="booth.id" :active="active"/>
+                  <boothItem :boothId="booth.id" :active="active" />
                 </div>
               </v-slide-item>
             </v-slide-group>
@@ -65,14 +70,18 @@
         <v-row align="center" justify="center">
           <v-card>
             <v-card-title>まだブースがありません。</v-card-title>
-            <v-card-text>ブースを作成して、イベントを盛り上げましょう！</v-card-text>
+            <v-card-text
+              >ブースを作成して、イベントを盛り上げましょう！</v-card-text
+            >
             <v-card-actions class="justify-center">
-              <v-btn large color="primary" @click="addBooth">サークル参加する</v-btn>
+              <v-btn large color="primary" @click="addBooth"
+                >サークル参加する</v-btn
+              >
+              <loginDialog ref="loginDialog" />
             </v-card-actions>
           </v-card>
         </v-row>
       </v-content>
-      <loginDialog ref="loginDialog"/>
     </template>
   </v-content>
 </template>

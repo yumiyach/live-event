@@ -56,6 +56,7 @@ export const actions = {
       boothId,
       comment => {
         commit('addComment', comment)
+        dispatch('user/getUser', comment.data.userId, { root: true })
       },
       commentId => {
         commit('deleteComment', commentId)
