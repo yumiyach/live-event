@@ -8,7 +8,7 @@ export default class Booth extends Document {
     this.data = {
       name: '',
       description: '',
-      imageUrl: '',
+      headerImageUrl: '',
       userId: '',
       itemList: [],
       isOnline: false
@@ -77,7 +77,7 @@ export default class Booth extends Document {
       return {
         name: item.name,
         description: item.description,
-        imageUrl: item.imageUrl,
+        headerImageUrl: item.imageUrl,
         linkList: item.linkList
       }
     } else {
@@ -89,7 +89,7 @@ export default class Booth extends Document {
       return {
         name: item.name,
         description: item.description,
-        imageUrl: itemImage.imageUrl,
+        headerImageUrl: itemImage.imageUrl,
         linkList: item.linkList
       }
     }

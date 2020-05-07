@@ -8,16 +8,23 @@
         max-width="876"
       >
         <v-card-title class="display-1 accent--text">
-          『{{
-          eventData.name
-          }}』のブースを編集
+          『{{ eventData.name }}』のブースを編集
         </v-card-title>
         <v-card-text>
           <v-form ref="form" lazy-validation @submit.prevent>
-            <v-img v-if="headerImageUrl" :src="headerImageUrl" aspect-ratio="2"></v-img>
-            <v-file-input @change="onHeaderImagePicked" accept="image/*" label="ヘッダー画像"></v-file-input>
+            <v-img
+              v-if="headerImageUrl"
+              :src="headerImageUrl"
+              aspect-ratio="2"
+            ></v-img>
+            <v-file-input
+              @change="onHeaderImagePicked"
+              accept="image/*"
+              label="【必須】ヘッダー画像"
+              :rules="imageRules"
+            ></v-file-input>
             <v-text-field
-              v-model="name"
+              v-model="wishListUrl"
               :counter="30"
               class="mb-3"
               dense
@@ -42,7 +49,9 @@
               <template v-slot:no-data>
                 <v-list-item>
                   <v-list-item-content>
-                    <v-list-item-name>テキスト入力でタグを新規作成します。</v-list-item-name>
+                    <v-list-item-title
+                      >テキスト入力でタグを新規作成します。</v-list-item-title
+                    >
                   </v-list-item-content>
                 </v-list-item>
               </template>
@@ -56,7 +65,9 @@
                 >
                   <v-icon small left>mdi-tag-outline</v-icon>
                   {{ item }}
-                  <v-icon small right @click="parent.selectItem(item)">mdi-close</v-icon>
+                  <v-icon small right @click="parent.selectItem(item)"
+                    >mdi-close</v-icon
+                  >
                 </v-chip>
               </template>
               <template v-slot:item="{ index, item }">
@@ -75,22 +86,29 @@
                   <v-row class="ma-0">
                     <v-col class="pa-0">
                       <v-img
-                        :src="item.imageUrl? item.imageUrl : require('~/assets/images/no_image.png')"
+                        :src="
+                          item.imageUrl
+                            ? item.imageUrl
+                            : require('~/assets/images/no_image.png')
+                        "
                         aspect-ratio="0.707"
-                        @click="onItemImageClicked('itemImage_'+i)"
+                        @click="onItemImageClicked('itemImage_' + i)"
                       ></v-img>
                       <input
                         :index="i"
-                        :ref="'itemImage_'+i"
-                        :id="'itemImage_'+i"
-                        :name="'itemImage_'+i"
+                        :ref="'itemImage_' + i"
+                        :id="'itemImage_' + i"
+                        :name="'itemImage_' + i"
                         type="file"
                         accept="image/*"
                         @change="onItemImagePicked"
                         style="display:none"
-                      >
+                      />
                     </v-col>
-                    <v-col class="pa-0" style="display: flex;flex-direction: column;">
+                    <v-col
+                      class="pa-0"
+                      style="display: flex;flex-direction: column;"
+                    >
                       <v-card-title>
                         <v-text-field
                           v-model="itemList[i].name"
@@ -115,14 +133,16 @@
                             small
                             outlined
                             class="ma-1"
-                            @click="openEditLinkDialog(i,k)"
-                          >{{ link.text }}</v-btn>
+                            @click="openEditLinkDialog(i, k)"
+                            >{{ link.text }}</v-btn
+                          >
                           <v-btn
                             class="ma-1"
                             small
                             color="primary"
                             @click="openEditLinkDialog(i)"
-                          >リンク追加</v-btn>
+                            >リンク追加</v-btn
+                          >
                         </v-row>
                       </v-card-text>
                       <v-card-actions>
@@ -137,22 +157,32 @@
                   <v-card-title>作品を追加する</v-card-title>
                   <v-divider class="mx-4"></v-divider>
                   <v-card-title>
-                    <div class="subtitle-1">すでに作品・通販ページがある場合</div>
+                    <div class="subtitle-1">
+                      すでに作品・通販ページがある場合
+                    </div>
                   </v-card-title>
                   <v-card-text>
-                    <v-text-field dense v-model="addItemUrl" label="URL" outlined></v-text-field>
+                    <v-text-field
+                      dense
+                      v-model="addItemUrl"
+                      label="URL"
+                      outlined
+                    ></v-text-field>
                     <v-btn
                       color="primary"
                       @click="addItemByUrl"
-                      :disabled="addItemUrl==null"
-                    >URLから追加</v-btn>
+                      :disabled="addItemUrl == null"
+                      >URLから追加</v-btn
+                    >
                   </v-card-text>
                   <v-divider class="mx-4"></v-divider>
                   <v-card-title>
                     <div class="subtitle-1">まだ作品ページがない場合</div>
                   </v-card-title>
                   <v-card-text>
-                    <v-btn color="secondary" @click="addItem">作品データを作成</v-btn>
+                    <v-btn color="secondary" @click="addItem"
+                      >作品データを作成</v-btn
+                    >
                   </v-card-text>
                 </v-card>
               </v-col>
@@ -161,7 +191,7 @@
         </v-card-text>
         <v-card-actions class="pa-4 mx-auto">
           <v-btn large :to="`/event/${eventId}/${boothId}`">キャンセル</v-btn>
-          <v-spacer/>
+          <v-spacer />
           <v-btn large color="error" @click="deleteThisBooth">ブース削除</v-btn>
           <v-btn x-large color="accent" @click="submit" :loading="isLoading">
             <v-icon left>mdi-check</v-icon>編集する
@@ -170,14 +200,26 @@
 
         <v-dialog v-model="editLinkVisible" width="500" color="white">
           <v-card>
-            <v-card-title primary-title style="position:sticky;top:0;z-index:1;">リンクを追加する</v-card-title>
+            <v-card-title primary-title style="position:sticky;top:0;z-index:1;"
+              >リンクを追加する</v-card-title
+            >
             <v-card-text>
-              <v-text-field dense v-model="editLinkUrl" label="URL" outlined></v-text-field>
-              <v-text-field dense v-model="editLinkText" label="テキスト" outlined></v-text-field>
+              <v-text-field
+                dense
+                v-model="editLinkUrl"
+                label="URL"
+                outlined
+              ></v-text-field>
+              <v-text-field
+                dense
+                v-model="editLinkText"
+                label="テキスト"
+                outlined
+              ></v-text-field>
             </v-card-text>
             <v-card-actions>
               <v-btn @click="editLinkVisible = false">キャンセル</v-btn>
-              <v-spacer/>
+              <v-spacer />
               <v-btn color="error" @click="deleteLink">削除</v-btn>
               <v-btn color="primary" @click="updateLink">追加</v-btn>
             </v-card-actions>
@@ -211,8 +253,9 @@ import axios from 'axios'
 
 export default {
   components: {},
-  data: () => ({
+  data: vm => ({
     isLoading: false,
+    search: null,
     addItemUrl: null,
     editLinkVisible: false,
     editLinkItemIndex: -1,
@@ -224,7 +267,37 @@ export default {
     wishListUrl: null,
     itemList: [],
     tagListItem: ['NL', 'BL', 'GL', 'パロディ'],
-    tagList: []
+    tagList: [],
+    tagRules: [
+      v => {
+        for (const tag of v) {
+          if (tag.match(/[\.\~\*\/\[\]]/g)) {
+            return '「.~*/[]」を含むことはできません。'
+          }
+          if (20 < Array.from(tag).length) {
+            return 'タグは20文字以内にしてください。'
+          }
+        }
+        return true
+      }
+    ],
+    imageRules: [
+      value =>
+        typeof value === 'object' ||
+        typeof vm.headerImageUrl === 'object' ||
+        typeof vm.headerImageUrl !== null ||
+        'ヘッダー画像は必須です。',
+      value =>
+        typeof vm.headerImageUrl === 'object' ||
+        typeof vm.headerImageUrl !== null ||
+        (value && value.size < 2000000) ||
+        '画像サイズは2MB以下にしてください。',
+      value =>
+        typeof vm.headerImageUrl === 'object' ||
+        typeof vm.headerImageUrl !== null ||
+        (value && value.size < 2000000) ||
+        '画像サイズは2MB以下にしてください。'
+    ]
   }),
   computed: {
     ...mapGetters('event', ['eventById']),

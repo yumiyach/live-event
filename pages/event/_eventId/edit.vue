@@ -36,7 +36,7 @@
               <template v-slot:no-data>
                 <v-list-item>
                   <v-list-item-content>
-                    <v-list-item-name>テキスト入力でタグを新規作成します。</v-list-item-name>
+                    <v-list-item-title>テキスト入力でタグを新規作成します。</v-list-item-title>
                   </v-list-item-content>
                 </v-list-item>
               </template>
@@ -74,7 +74,7 @@
               label="イベントの説明文"
               :counter="500"
             ></v-textarea>
-            <v-img v-if="imageUrl" :src="imageUrl"/>
+            <v-img v-if="headerImageUrl" :src="headerImageUrl"/>
             <v-file-input :rules="imageRules" @change="onFilePicked" accept="image/*" label="トップ画像"></v-file-input>
             <v-row>
               <v-col cols="12" sm="4">
@@ -156,8 +156,8 @@ export default {
     tagList: [],
     isLoading: false,
     search: null,
-    imageUrl: '',
-    imageFile: '',
+    headerImageUrl: '',
+    headerImageFile: '',
     nameRules: [
       v => !!v || 'イベント名は必須です。',
       v =>
@@ -179,9 +179,20 @@ export default {
     ],
     imageRules: [
       value =>
+        typeof value === 'object' ||
+        typeof vm.headerImageUrl === 'object' ||
+        typeof vm.headerImageUrl !== null ||
+        'ヘッダー画像は必須です。',
+      value =>
+        typeof vm.headerImageUrl === 'object' ||
+        typeof vm.headerImageUrl !== null ||
         (value && value.size < 2000000) ||
-        !value ||
-        '画像サイズは2MBいかにしてください。'
+        '画像サイズは2MB以下にしてください。',
+      value =>
+        typeof vm.headerImageUrl === 'object' ||
+        typeof vm.headerImageUrl !== null ||
+        (value && value.size < 2000000) ||
+        '画像サイズは2MB以下にしてください。'
     ],
     today: '2020-01-01',
     startDate: '2020-01-01',
@@ -224,7 +235,7 @@ export default {
       this.name = event.data.name
       this.description = event.data.name
       this.tagList = event.data.tagList
-      this.imageUrl = event.data.imageUrl
+      this.headerImageUrl = event.data.headerImageUrl
       this.startDate =
         event.data.startDate.getFullYear() +
         '-' +
@@ -245,17 +256,17 @@ export default {
         ':00'
     },
     onFilePicked(e) {
-      this.imageUrl = ''
+      this.headerImageUrl = ''
       const file = e
       if (file !== undefined) {
         const fr = new FileReader()
         fr.readAsDataURL(file)
         fr.addEventListener('load', () => {
-          this.imageUrl = fr.result
-          this.imageFile = file
+          this.headerImageUrl = fr.result
+          this.headerImageFile = file
         })
       } else {
-        this.imageFile = ''
+        this.headerImageFile = ''
         this.startDate = ''
       }
     },
@@ -290,8 +301,8 @@ export default {
             endDate: new Date(this.startDate + ' ' + this.endTime)
           }
         }
-        if (this.imageFile) {
-          eventData.imageFile = this.imageFile
+        if (this.headerImageFile) {
+          eventData.headerImageFile = this.headerImageFile
         }
         const event = await this.updateEvent(eventData)
         this.isLoading = false

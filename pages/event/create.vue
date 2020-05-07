@@ -36,7 +36,7 @@
               <template v-slot:no-data>
                 <v-list-item>
                   <v-list-item-content>
-                    <v-list-item-name>テキスト入力でタグを新規作成します。</v-list-item-name>
+                    <v-list-item-title>テキスト入力でタグを新規作成します。</v-list-item-title>
                   </v-list-item-content>
                 </v-list-item>
               </template>
@@ -74,7 +74,7 @@
               label="イベントの説明文"
               :counter="500"
             ></v-textarea>
-            <v-img v-if="imageUrl" :src="imageUrl" aspect-ratio="2"/>
+            <v-img v-if="headerImageUrl" :src="headerImageUrl" aspect-ratio="2"/>
             <v-file-input
               :rules="imageRules"
               @change="onFilePicked"
@@ -141,8 +141,8 @@ export default {
     tagList: [],
     loading: false,
     search: null,
-    imageUrl: '',
-    imageFile: false,
+    headerImageUrl: '',
+    headerImageFile: false,
     nameRules: [
       v => !!v || 'イベント名は必須です。',
       v =>
@@ -208,12 +208,12 @@ export default {
         const fr = new FileReader()
         fr.readAsDataURL(file)
         fr.addEventListener('load', () => {
-          this.imageUrl = fr.result
-          this.imageFile = file
+          this.headerImageUrl = fr.result
+          this.headerImageFile = file
         })
       } else {
-        this.imageFile = ''
-        this.imageUrl = ''
+        this.headerImageFile = ''
+        this.headerImageUrl = ''
       }
     },
     formatDate(date) {
@@ -237,7 +237,7 @@ export default {
             startDate: new Date(this.startDate + ' ' + this.startTime),
             endDate: new Date(this.startDate + ' ' + this.endTime)
           },
-          imageFile: this.imageFile
+          headerImageFile: this.headerImageFile
         }
         const event = await this.createEvent(eventData)
         this.$router.push('/event/' + event.id)

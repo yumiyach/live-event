@@ -25,7 +25,7 @@ export default class Event extends Document {
     const cardImage = new EventImage(this.id, data.imageFile)
     await cardImage.ready
     await this.ref.update({
-      imageUrl: cardImage.imageUrl
+      headerImageUrl: cardImage.imageUrl
     })
     await this.getData()
   }
@@ -38,7 +38,7 @@ export default class Event extends Document {
       const cardImage = new EventImage(this.id, data.imageFile)
       await cardImage.ready
       await this.ref.update({
-        imageUrl: cardImage.imageUrl
+        headerImageUrl: cardImage.imageUrl
       })
     }
     await this.getData()
