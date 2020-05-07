@@ -6,10 +6,19 @@
           <v-icon>mdi-menu</v-icon>
         </v-btn>
 
-        <v-spacer/>
-        <v-toolbar-title class="logo" style="font-size:24px">{{eventData.name}}</v-toolbar-title>
-        <v-spacer/>
-        <v-btn fab depressed outlined x-small color="primary" @click="eventInfomationVisible=true">
+        <v-spacer />
+        <v-toolbar-title class="logo" style="font-size:24px">{{
+          eventData.name
+        }}</v-toolbar-title>
+        <v-spacer />
+        <v-btn
+          fab
+          depressed
+          outlined
+          x-small
+          color="primary"
+          @click="eventInfomationVisible = true"
+        >
           <v-icon>mdi-information-variant</v-icon>
         </v-btn>
         <v-dialog v-model="eventInfomationVisible" max-width="1000px">
@@ -20,50 +29,76 @@
                 align-center
                 wrap
                 :style="{
-                height: 'calc(100vh - 220px)'
-              }"
+                  height: 'calc(100vh - 220px)'
+                }"
               >
-                <v-img :src="eventData.headerImageUrl" style="height:100%"/>
+                <v-img :src="eventData.headerImageUrl" style="height:100%" />
               </v-layout>
             </v-layout>
             <v-card-title>
-              <span class="mr-3">{{eventData.name}}</span>
+              <span class="mr-3">{{ eventData.name }}</span>
               <v-btn
-                v-if="eventData.userId===userId"
+                v-if="eventData.userId === userId"
                 color="primary"
                 :to="`/event/${eventId}/edit`"
-              >編集</v-btn>
+                >イベント編集</v-btn
+              >
             </v-card-title>
             <v-card-text>
               <v-layout align-center class="mb-2" wrap>
                 <v-chip small class="mr-2" color="primary">主催</v-chip>
-                <userItem v-if="eventData.userId" :userId="eventData.userId"/>
+                <userItem v-if="eventData.userId" :userId="eventData.userId" />
               </v-layout>
               <v-layout align-center wrap>
                 <v-chip small class="mr-2" color="primary">日時</v-chip>
-                <v-chip v-if="inSession" label outlined x-small class="mr-2" color="primary">開催中</v-chip>
-                <v-chip v-else-if="until" label outlined x-small class="mr-2">{{until}}</v-chip>
-                <div class="mr-2">{{date}}</div>
+                <v-chip
+                  v-if="inSession"
+                  label
+                  outlined
+                  x-small
+                  class="mr-2"
+                  color="primary"
+                  >開催中</v-chip
+                >
+                <v-chip v-else-if="until" label outlined x-small class="mr-2">{{
+                  until
+                }}</v-chip>
+                <div class="mr-2">{{ date }}</div>
               </v-layout>
             </v-card-text>
-            <v-card-text>{{eventData.description}}</v-card-text>
+            <v-card-text>
+              <v-chip
+                v-for="(tag, index) in eventData.tagList"
+                :key="index"
+                class="mr-3"
+                x-small=""
+              >
+                #{{ tag }}
+              </v-chip>
+            </v-card-text>
+            <v-card-text>{{ eventData.description }}</v-card-text>
             <v-card-actions>
-              <v-btn v-if="!myBooth" large color="primary" @click="addBooth">サークル参加</v-btn>
+              <v-btn v-if="!myBooth" large color="primary" @click="addBooth"
+                >サークル参加</v-btn
+              >
               <v-btn
                 v-else
                 large
                 color="primary"
                 :to="`/event/${eventId}/${myBooth.id}/edit`"
-              >ブースを編集</v-btn>
+                >ブースを編集</v-btn
+              >
               <v-spacer></v-spacer>
-              <v-btn depressed @click="eventInfomationVisible = false">閉じる</v-btn>
+              <v-btn depressed @click="eventInfomationVisible = false"
+                >閉じる</v-btn
+              >
             </v-card-actions>
           </v-card>
         </v-dialog>
       </v-layout>
     </v-app-bar>
     <v-navigation-drawer v-model="drawer" temporary fixed>
-      <drawer-menu/>
+      <drawer-menu />
     </v-navigation-drawer>
   </div>
 </template>
