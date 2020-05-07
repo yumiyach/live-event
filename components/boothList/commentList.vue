@@ -67,6 +67,9 @@
                   <div class="shrink ml-auto">
                     {{ item.data.createdAt | date }}
                   </div>
+                  <v-icon v-if="userId === item.data.userId" class="ml-2" small @click="deleteThisComment(item.id)"
+                    >mdi-delete</v-icon
+                  >
                 </v-list-item-subtitle>
               </v-list-item-content>
             </v-list-item>
@@ -105,7 +108,7 @@ export default {
     commentText: ''
   }),
   computed: {
-    ...mapState('account', ['isLogin']),
+    ...mapState('account', ['isLogin','userId']),
     ...mapGetters('comment', ['commentListByBoothId']),
     ...mapGetters('booth', ['boothById']),
     ...mapGetters('event', ['eventById']),
@@ -137,7 +140,11 @@ export default {
     this.init()
   },
   methods: {
-    ...mapActions('comment', ['createComment', 'listenCommentByBoothId']),
+    ...mapActions('comment', [
+      'createComment',
+      'listenCommentByBoothId',
+      'deleteComment'
+    ]),
     init() {
       this.listenCommentByBoothId(this.boothId)
     },
@@ -151,6 +158,11 @@ export default {
         })
         this.$refs.form.reset()
         this.isLoading = false
+      }
+    },
+    async deleteThisComment(commentId) {
+      if (window.confirm('削除しますか？')) {
+        this.deleteComment(commentId)
       }
     }
   },

@@ -39,6 +39,7 @@ export default class Document {
       if (snapShot.exists) {
         this.data = snapShot.data()
       } else {
+        this.data = this.data ? this.data : {}
         this.data.notFound = true
       }
     }

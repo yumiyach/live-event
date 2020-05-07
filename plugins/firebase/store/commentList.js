@@ -17,15 +17,26 @@ class BoothList {
       })
     })
   }
-  listenByBoothId(boothId, callback) {
+  listenByBoothId(boothId, addCallback, deleteCallback) {
     this.collection
       .where('boothId', '==', boothId)
-      .onSnapshot(function(querySnapshot) {
-        querySnapshot.forEach(function(doc) {
-          callback({
-            id: doc.id,
-            data: doc.data()
-          })
+      .onSnapshot(function(snapshot) {
+        snapshot.docChanges().forEach(function(change) {
+          if (change.type === 'added') {
+            addCallback({
+              id: change.doc.id,
+              data: change.doc.data()
+            })
+          }
+          if (change.type === 'modified') {
+            addCallback({
+              id: change.doc.id,
+              data: change.doc.data()
+            })
+          }
+          if (change.type === 'removed') {
+            deleteCallback(change.doc.id)
+          }
         })
       })
   }

@@ -1,4 +1,8 @@
-import { pushObjectToList, getObjectFromList } from '~/plugins/functions'
+import {
+  pushObjectToList,
+  getObjectFromList,
+  deleteFromList
+} from '~/plugins/functions'
 import Comment from '~/plugins/firebase/store/Comment'
 import commentList from '~/plugins/firebase/store/commentList'
 import auth from '~/plugins/firebase/account/auth'
@@ -13,6 +17,9 @@ export const mutations = {
       comment.data.createdAt = comment.data.createdAt.toDate()
     }
     pushObjectToList(state.commentList, comment)
+  },
+  deleteComment(state, commentId) {
+    deleteFromList(state.commentList, commentId)
   }
 }
 
@@ -45,9 +52,15 @@ export const actions = {
     return comment
   },
   async listenCommentByBoothId({ dispatch, commit }, boothId) {
-    await commentList.listenByBoothId(boothId, comment => {
-      commit('addComment', comment)
-    })
+    await commentList.listenByBoothId(
+      boothId,
+      comment => {
+        commit('addComment', comment)
+      },
+      commentId => {
+        commit('deleteComment', commentId)
+      }
+    )
   },
   async createComment({ commit }, data) {
     data.userId = auth.userId
@@ -56,5 +69,9 @@ export const actions = {
     await comment.ready
     commit('addComment', comment)
     return comment
+  },
+  async deleteComment({ commit, dispatch }, commentId) {
+    const comment = new Comment(commentId)
+    await comment.delete()
   }
 }

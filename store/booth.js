@@ -1,4 +1,8 @@
-import { pushObjectToList, getObjectFromList } from '~/plugins/functions'
+import {
+  pushObjectToList,
+  getObjectFromList,
+  deleteFromList
+} from '~/plugins/functions'
 import Booth from '~/plugins/firebase/store/Booth'
 import boothList from '~/plugins/firebase/store/boothList'
 import auth from '~/plugins/firebase/account/auth'
@@ -10,6 +14,9 @@ export const state = () => ({
 export const mutations = {
   addBooth(state, booth) {
     pushObjectToList(state.boothList, booth)
+  },
+  deleteBooth(state, boothId) {
+    deleteFromList(state.boothList, boothId)
   }
 }
 
@@ -59,5 +66,6 @@ export const actions = {
   async deleteBooth({ commit, dispatch }, boothId) {
     const booth = new Booth(boothId)
     await booth.delete()
+    commit('deleteBooth', boothId)
   }
 }
