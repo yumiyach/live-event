@@ -97,12 +97,7 @@
                       v-on="on"
                     ></v-text-field>
                   </template>
-                  <v-date-picker
-                    v-model="startDate"
-                    locale="jp"
-                    no-title
-                    :min="new Date().toISOString().substr(0, 10)"
-                  >
+                  <v-date-picker v-model="startDate" locale="jp" no-title :min="today">
                     <v-layout justify-end>
                       <v-btn color="primary" @click="startDateVisible=false">確定</v-btn>
                     </v-layout>
@@ -188,8 +183,9 @@ export default {
         !value ||
         '画像サイズは2MBいかにしてください。'
     ],
-    startDate: new Date().toISOString().substr(0, 10),
-    startDateFormatted: vm.formatDate(new Date().toISOString().substr(0, 10)),
+    today: '2020-01-01',
+    startDate: '2020-01-01',
+    startDateFormatted: '2020/01/01',
     startDateVisible: false,
     startTime: '10:00:00',
     endTime: '16:00:00'
@@ -215,6 +211,15 @@ export default {
       this.onLogout(() => {
         this.$router.push('/')
       })
+      const today = new Date()
+      this.startDate =
+        today.getFullYear() +
+        '-' +
+        ('00' + (today.getMonth() + 1)).slice(-2) +
+        '-' +
+        ('00' + today.getDate()).slice(-2)
+      this.today = this.startDate
+      this.startDateFormatted = this.formatDate(this.startDate)
       const event = await this.getEvent(this.eventId)
       this.name = event.data.name
       this.description = event.data.name

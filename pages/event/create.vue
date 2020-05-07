@@ -102,12 +102,7 @@
                       v-on="on"
                     ></v-text-field>
                   </template>
-                  <v-date-picker
-                    v-model="startDate"
-                    locale="jp"
-                    no-title
-                    :min="new Date().toISOString().substr(0, 10)"
-                  >
+                  <v-date-picker v-model="startDate" locale="jp" no-title :min="today">
                     <v-layout justify-end>
                       <v-btn color="primary" @click="startDateVisible=false">確定</v-btn>
                     </v-layout>
@@ -139,7 +134,7 @@ import { mapState, mapActions } from 'vuex'
 
 export default {
   components: {},
-  data: vm => ({
+  data: () => ({
     name: '',
     description: '',
     tagListItem: ['版権', 'オリジナル'],
@@ -147,7 +142,7 @@ export default {
     loading: false,
     search: null,
     imageUrl: '',
-    imageFile: '',
+    imageFile: false,
     nameRules: [
       v => !!v || 'イベント名は必須です。',
       v =>
@@ -168,11 +163,13 @@ export default {
       }
     ],
     imageRules: [
-      value => value || 'ヘッダー画像は必須です。',
-      value => value.size < 2000000 || '画像サイズは2MBいかにしてください。'
+      value => typeof value === 'object' || 'ヘッダー画像は必須です。',
+      value =>
+        (value && value.size < 2000000) || '画像サイズは2MBいかにしてください。'
     ],
-    startDate: new Date().toISOString().substr(0, 10),
-    startDateFormatted: vm.formatDate(new Date().toISOString().substr(0, 10)),
+    today: '2020-01-01',
+    startDate: '2020-01-01',
+    startDateFormatted: '2020/01/01',
     startDateVisible: false,
     startTime: '10:00:00',
     endTime: '16:00:00'
@@ -186,13 +183,25 @@ export default {
     }
   },
   created() {
-    this.onLogout(() => {
-      this.$router.push('/')
-    })
+    this.init()
   },
   methods: {
     ...mapActions('account', ['onLogout']),
     ...mapActions('event', ['createEvent']),
+    init() {
+      this.onLogout(() => {
+        this.$router.push('/')
+      })
+      const today = new Date()
+      this.startDate =
+        today.getFullYear() +
+        '-' +
+        ('00' + (today.getMonth() + 1)).slice(-2) +
+        '-' +
+        ('00' + today.getDate()).slice(-2)
+      this.today = this.startDate
+      this.startDateFormatted = this.formatDate(this.startDate)
+    },
     onFilePicked(e) {
       const file = e
       if (file !== undefined) {
