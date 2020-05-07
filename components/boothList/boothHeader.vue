@@ -1,7 +1,13 @@
 <template>
-  <v-row class="mx-0 my-4 align-center">
-    <v-col class="display-1 d-flex" align-center cols="12" style="flex-wrap: wrap; justify-content: space-between;">
-      <div class="mb-2">{{ userData.displayName }}のブース</div>
+  <v-row class="mx-0 mb-4 align-center">
+    <v-col class="display-1" cols="12">{{ userData.displayName }}のブース</v-col>
+    <v-col
+      class="d-flex pt-0"
+      align-center
+      cols="12"
+      style="flex-wrap: wrap; justify-content: space-between;"
+    >
+      <userItem :userId="boothData.userId" />
       <div class="ml-auto">
         <v-btn
           class="mx-1"
@@ -9,8 +15,12 @@
           dark
           small
           color="#55acee"
-          :href="'https://twitter.com/intent/user?user_id=' + userData.uid"
-          target="_blank"
+          @click="
+            share(
+              'twitter',
+              userData.displayName + 'のブース #' + eventData.name
+            )
+          "
         >
           <v-icon dark>mdi-twitter</v-icon>
         </v-btn>
@@ -37,7 +47,11 @@
       </div>
     </v-col>
     <v-col class="pt-0" cols="12">
-      <v-chip v-for="(tag, index) in boothData.tagList" :key="index" class="mr-3">
+      <v-chip
+        v-for="(tag, index) in boothData.tagList"
+        :key="index"
+        class="mr-3"
+      >
         #{{ tag }}
       </v-chip>
     </v-col>
@@ -46,8 +60,12 @@
 
 <script>
 import { mapState, mapGetters, mapActions } from 'vuex'
+import share from '~/components/mixins/share'
+import userItem from '~/components/userItem'
 
 export default {
+  mixins: [share],
+  components: { userItem },
   props: {
     boothId: {
       type: String,
@@ -57,10 +75,14 @@ export default {
   },
   computed: {
     ...mapGetters('booth', ['boothById']),
+    ...mapGetters('event', ['eventById']),
     ...mapGetters('user', ['userById']),
     ...mapState('account', ['userId']),
     boothData() {
       return this.boothById(this.boothId).data
+    },
+    eventData() {
+      return this.eventById(this.boothData.eventId).data
     },
     userData() {
       return this.userById(this.boothData.userId).data

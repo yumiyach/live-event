@@ -35,14 +35,39 @@
                 <v-img :src="eventData.headerImageUrl" style="height:100%" />
               </v-layout>
             </v-layout>
-            <v-card-title>
+            <v-card-title class="d-flex">
               <span class="mr-3">{{ eventData.name }}</span>
-              <v-btn
-                v-if="eventData.userId === userId"
-                color="primary"
-                :to="`/event/${eventId}/edit`"
-                >イベント編集</v-btn
-              >
+              <div class="ml-auto">
+                <v-btn
+                  class="mx-1"
+                  fab
+                  dark
+                  x-small
+                  color="#55acee"
+                  @click="
+                    share(
+                      'twitter',
+                      '#' +
+                        eventData.name +
+                        ' ' +
+                        (inSession
+                          ? '開催中！'
+                          : until !== '終了'
+                          ? '開催まで' + until + '！'
+                          : '【過去イベント】')
+                    )
+                  "
+                >
+                  <v-icon dark>mdi-twitter</v-icon>
+                </v-btn>
+                <v-btn
+                  small
+                  v-if="eventData.userId === userId"
+                  color="primary"
+                  :to="`/event/${eventId}/edit`"
+                  >イベント編集</v-btn
+                >
+              </div>
             </v-card-title>
             <v-card-text>
               <v-layout align-center class="mb-2" wrap>
@@ -106,9 +131,11 @@
 <script>
 import drawerMenu from '~/components/navBar/drawerMenu'
 import userItem from '~/components/userItem'
+import share from '~/components/mixins/share'
 import { mapState, mapActions, mapGetters } from 'vuex'
 
 export default {
+  mixins: [share],
   components: { drawerMenu, userItem },
   data: () => ({
     eventInfomationVisible: true,
