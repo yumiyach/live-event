@@ -84,7 +84,7 @@
               <v-col v-for="(item, i) in itemList" :key="i" cols="12" xl="6">
                 <v-card>
                   <v-row class="ma-0">
-                    <v-col class="pa-0">
+                    <v-col class="pa-0" cols="12" sm="6">
                       <v-img
                         :src="
                           item.imageUrl
@@ -108,6 +108,8 @@
                     <v-col
                       class="pa-0"
                       style="display: flex;flex-direction: column;"
+                      cols="12"
+                      sm="6"
                     >
                       <v-card-title>
                         <v-text-field
@@ -115,7 +117,7 @@
                           :counter="50"
                           class="mb-3"
                           label="タイトル"
-                          required
+                          :rules="nameRules"
                         ></v-text-field>
                       </v-card-title>
                       <v-card-subtitle>
@@ -270,6 +272,12 @@ export default {
     headerImageFile: false,
     wishListUrl: null,
     itemList: [],
+    nameRules: [
+      v => !!v || 'タイトルは必須です。',
+      v =>
+        (v && Array.from(v).length <= 50) ||
+        'タイトルは50文字以内にしてください。'
+    ],
     imageRules: [
       value => typeof value === 'object' || 'ヘッダー画像は必須です。',
       value =>

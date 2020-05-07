@@ -23,7 +23,7 @@
                 height: 'calc(100vh - 220px)'
               }"
               >
-                <v-img :src="eventData.imageUrl" style="height:100%"/>
+                <v-img :src="eventData.headerImageUrl" style="height:100%"/>
               </v-layout>
             </v-layout>
             <v-card-title>

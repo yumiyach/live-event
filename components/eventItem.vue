@@ -1,6 +1,6 @@
 <template>
   <v-card>
-    <v-img :src="eventData.imageUrl" aspect-ratio="2"/>
+    <v-img :src="eventData.headerImageUrl" aspect-ratio="2"/>
     <v-list three-line class="py-0">
       <v-divider/>
       <v-list-item>
