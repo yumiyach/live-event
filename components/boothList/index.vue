@@ -127,23 +127,20 @@ export default {
       this.boothId = this.boothList[val].id
       history.replaceState('', '', `/event/${this.eventId}/${this.boothId}`)
       window.scrollTo(0, 0)
-    }
-  },
-  created() {
-    this.init()
-  },
-  methods: {
-    init() {
-      if (this.currentBoothId) {
-        const index = this.boothList.findIndex(
+    },
+    boothList(boothList) {
+      if (this.currentBoothId && !this.currentBoothIndex) {
+        const index = boothList.findIndex(
           item => item.id == this.currentBoothId
         )
-        if (index && index !== -1) {
+        if (index !== -1) {
           this.currentBoothIndex = index
           this.boothId = this.currentBoothId
         }
       }
-    },
+    }
+  },
+  methods: {
     addBooth() {
       if (this.isLogin) {
         this.$router.push(`/event/${this.eventId}/addBooth`)
