@@ -6,7 +6,7 @@ class BoothList {
     this.collection = store.collection('events')
   }
   async getRecently(callback) {
-    const snapShot = await this.collection.orderBy('startDate', 'desc').get()
+    const snapShot = await this.collection.where('isPrivate','==', false).orderBy('startDate', 'desc').get()
     snapShot.forEach(async doc => {
       callback({
         id: doc.id,

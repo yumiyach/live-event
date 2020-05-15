@@ -36,7 +36,9 @@
               <template v-slot:no-data>
                 <v-list-item>
                   <v-list-item-content>
-                    <v-list-item-title>テキスト入力でタグを新規作成します。</v-list-item-title>
+                    <v-list-item-title
+                      >テキスト入力でタグを新規作成します。</v-list-item-title
+                    >
                   </v-list-item-content>
                 </v-list-item>
               </template>
@@ -50,7 +52,9 @@
                 >
                   <v-icon small left>mdi-tag-outline</v-icon>
                   {{ item }}
-                  <v-icon small right @click="parent.selectItem(item)">mdi-close</v-icon>
+                  <v-icon small right @click="parent.selectItem(item)"
+                    >mdi-close</v-icon
+                  >
                 </v-chip>
               </template>
               <template v-slot:item="{ index, item }">
@@ -74,8 +78,13 @@
               label="イベントの説明文"
               :counter="500"
             ></v-textarea>
-            <v-img v-if="headerImageUrl" :src="headerImageUrl"/>
-            <v-file-input :rules="imageRules" @change="onFilePicked" accept="image/*" label="トップ画像"></v-file-input>
+            <v-img v-if="headerImageUrl" :src="headerImageUrl" />
+            <v-file-input
+              :rules="imageRules"
+              @change="onFilePicked"
+              accept="image/*"
+              label="トップ画像"
+            ></v-file-input>
             <v-row>
               <v-col cols="12" sm="4">
                 <v-menu
@@ -97,27 +106,50 @@
                       v-on="on"
                     ></v-text-field>
                   </template>
-                  <v-date-picker v-model="startDate" locale="jp" no-title :min="today">
+                  <v-date-picker
+                    v-model="startDate"
+                    locale="jp"
+                    no-title
+                    :min="today"
+                  >
                     <v-layout justify-end>
-                      <v-btn color="primary" @click="startDateVisible=false">確定</v-btn>
+                      <v-btn color="primary" @click="startDateVisible = false"
+                        >確定</v-btn
+                      >
                     </v-layout>
                   </v-date-picker>
                 </v-menu>
               </v-col>
               <v-col cols="6" sm="4">
-                <v-text-field v-model="startTime" label="開始時刻" type="time" :clearable="false"></v-text-field>
+                <v-text-field
+                  v-model="startTime"
+                  label="開始時刻"
+                  type="time"
+                  :clearable="false"
+                ></v-text-field>
               </v-col>
               <v-col cols="6" sm="4">
-                <v-text-field v-model="endTime" label="終了時刻" type="time" :clearable="false"></v-text-field>
+                <v-text-field
+                  v-model="endTime"
+                  label="終了時刻"
+                  type="time"
+                  :clearable="false"
+                ></v-text-field>
               </v-col>
             </v-row>
+            <v-switch
+              v-model="isPrivate"
+              label="イベント一覧に表示させない"
+            ></v-switch>
           </v-form>
         </v-card-text>
 
         <v-card-actions class="pa-4 mx-auto">
           <v-btn large :to="`/event/${eventId}`">キャンセル</v-btn>
-          <v-spacer/>
-          <v-btn large color="error" @click="deleteThisEvent">イベント削除</v-btn>
+          <v-spacer />
+          <v-btn large color="error" @click="deleteThisEvent"
+            >イベント削除</v-btn
+          >
           <v-btn x-large color="accent" @click="submit">
             <v-icon left>mdi-check</v-icon>編集
           </v-btn>
@@ -199,7 +231,8 @@ export default {
     startDateFormatted: '2020/01/01',
     startDateVisible: false,
     startTime: '10:00:00',
-    endTime: '16:00:00'
+    endTime: '16:00:00',
+    isPrivate:false
   }),
   computed: {
     ...mapState('account', ['userId']),
@@ -234,6 +267,7 @@ export default {
       const event = await this.getEvent(this.eventId)
       this.name = event.data.name
       this.description = event.data.name
+      this.isPrivate = event.data.isPrivate
       this.tagList = event.data.tagList
       this.headerImageUrl = event.data.headerImageUrl
       this.startDate =
@@ -297,6 +331,7 @@ export default {
             description: this.description,
             tagToken: this.tagToken(),
             tagList: this.tagList,
+            isPrivate: this.isPrivate,
             startDate: new Date(this.startDate + ' ' + this.startTime),
             endDate: new Date(this.startDate + ' ' + this.endTime)
           }
