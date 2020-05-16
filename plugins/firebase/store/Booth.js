@@ -82,6 +82,7 @@ export default class Booth extends Document {
         name: item.name,
         description: item.description,
         imageUrl: item.imageUrl,
+        sampleUrl: item.sampleUrl,
         linkList: item.linkList
       }
     } else {
@@ -94,6 +95,7 @@ export default class Booth extends Document {
         name: item.name,
         description: item.description,
         imageUrl: itemImage.imageUrl,
+        sampleUrl: item.sampleUrl,
         linkList: item.linkList
       }
     }

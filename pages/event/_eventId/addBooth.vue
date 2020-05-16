@@ -97,12 +97,19 @@
                       <v-card-title>
                         <v-text-field
                           v-model="itemList[i].name"
-                          :counter="50"
+                          :counter="100"
                           class="mb-3"
                           label="タイトル"
                           :rules="nameRules"
                         ></v-text-field>
                       </v-card-title>
+                      <v-card-subtitle>
+                        <v-text-field
+                          v-model="itemList[i].sampleUrl"
+                          class="body-2"
+                          label="サンプルURL"
+                        ></v-text-field>
+                      </v-card-subtitle>
                       <v-card-subtitle>
                         <v-textarea
                           v-model="itemList[i].description"
@@ -228,8 +235,8 @@ export default {
     nameRules: [
       v => !!v || 'タイトルは必須です。',
       v =>
-        (v && Array.from(v).length <= 50) ||
-        'タイトルは50文字以内にしてください。'
+        (v && Array.from(v).length <= 100) ||
+        'タイトルは100文字以内にしてください。'
     ],
     imageRules: [
       value => typeof value === 'object' || 'ヘッダー画像は必須です。',
@@ -311,6 +318,7 @@ export default {
           name: data.title,
           description: data.description,
           imageUrl: data.imageUrl,
+          sampleUrl: '',
           imageFile: false,
           linkList: [
             {
@@ -331,6 +339,7 @@ export default {
         description: '',
         imageUrl: null,
         imageFile: false,
+        sampleUrl: '',
         linkList: []
       })
     },

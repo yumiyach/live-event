@@ -12,6 +12,9 @@
           </v-col>
           <v-col class="pa-0" cols="12" sm="6" style="display: flex;flex-direction: column;">
             <v-card-title>{{item.name}}</v-card-title>
+            <v-card-actions v-if="item.sampleUrl">
+              <v-btn :href="item.sampleUrl" target="_blank" small outlined>サンプルはこちら</v-btn>
+            </v-card-actions>
             <v-card-subtitle>{{item.description}}</v-card-subtitle>
             <v-card-actions v-if="sessionState===0||sessionState===1||isMyBooth" class="mt-auto">
               <v-btn
@@ -19,11 +22,11 @@
                 :key="k"
                 :href="link.url"
                 target="_blank"
-                small
+                color="primary"
                 outlined
               >{{ link.text }}</v-btn>
             </v-card-actions>
-            <v-card-subtitle v-else>通販リンクはイベント開始後に表示されます。</v-card-subtitle>
+            <v-card-subtitle v-else class="mt-auto">通販リンクはイベント開始後に表示されます。</v-card-subtitle>
           </v-col>
         </v-row>
       </v-card>
