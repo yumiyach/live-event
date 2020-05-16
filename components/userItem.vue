@@ -55,7 +55,6 @@ export default {
     ...mapActions('user', ['getUser']),
     async init() {
       const user = await this.getUser(this.userId)
-      console.log(user)
     }
   }
 }
