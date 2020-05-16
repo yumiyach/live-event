@@ -31,7 +31,7 @@ export default class Booth extends Document {
         data.headerImageFile
       )
       await headerImage.ready
-      this.ref.update({
+      await this.ref.update({
         headerImageUrl: headerImage.imageUrl
       })
     }
@@ -50,25 +50,29 @@ export default class Booth extends Document {
     if (!this.id) {
       return
     }
+    const itemListFunc = []
+    for (const index in data.itemList) {
+      itemListFunc.push(this.createItemData(data.itemList[index], index))
+    }
+    const itemList = await Promise.all(itemListFunc)
     if (data.headerImageFile) {
       const headerImage = new BoothImage(
         this.id + '/header',
         data.headerImageFile
       )
       await headerImage.ready
-      this.ref.update({
+      await this.ref.update({
+        ...data.concluded,
+        itemList: itemList,
         headerImageUrl: headerImage.imageUrl
       })
+    } else {
+      await this.ref.update({
+        ...data.concluded,
+        itemList: itemList
+      })
     }
-    const itemListFunc = []
-    for (const index in data.itemList) {
-      itemListFunc.push(this.createItemData(data.itemList[index], index))
-    }
-    const itemList = await Promise.all(itemListFunc)
-    await this.ref.update({
-      ...data.concluded,
-      itemList: itemList
-    })
+    await this.ref.update({})
     await this.getData()
   }
 
