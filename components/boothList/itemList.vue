@@ -4,12 +4,16 @@
       <v-card>
         <v-row class="ma-0">
           <v-col class="pa-0" cols="12" sm="6">
-            <v-img style="height:100%" :src="item.imageUrl ? item.imageUrl : require('~/assets/images/no_image.png')" aspect-ratio="0.707"/>
+            <v-img
+              style="height:100%"
+              :src="item.imageUrl ? item.imageUrl : require('~/assets/images/no_image.png')"
+              aspect-ratio="0.707"
+            />
           </v-col>
           <v-col class="pa-0" cols="12" sm="6" style="display: flex;flex-direction: column;">
             <v-card-title>{{item.name}}</v-card-title>
             <v-card-subtitle>{{item.description}}</v-card-subtitle>
-            <v-card-actions v-if="sessionState===0||sessionState===1" class="mt-auto">
+            <v-card-actions v-if="sessionState===0||sessionState===1||isMyBooth" class="mt-auto">
               <v-btn
                 v-for="(link, k) in item.linkList"
                 :key="k"
@@ -19,6 +23,7 @@
                 outlined
               >{{ link.text }}</v-btn>
             </v-card-actions>
+            <v-card-subtitle v-else>通販リンクはイベント開始後に表示されます。</v-card-subtitle>
           </v-col>
         </v-row>
       </v-card>
@@ -28,7 +33,7 @@
 
 
 <script>
-import { mapGetters, mapActions } from 'vuex'
+import { mapState, mapGetters, mapActions } from 'vuex'
 
 export default {
   props: {
@@ -41,6 +46,7 @@ export default {
   computed: {
     ...mapGetters('event', ['eventById']),
     ...mapGetters('booth', ['boothById']),
+    ...mapState('account', ['userId']),
     boothData() {
       return this.boothById(this.boothId).data
     },
@@ -60,6 +66,9 @@ export default {
         return -1
       }
       return 1
+    },
+    isMyBooth() {
+      return this.userId === this.boothData.userId
     }
   }
 }
