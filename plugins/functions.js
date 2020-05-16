@@ -22,14 +22,6 @@ export function deleteFromList(list, id) {
   if (index !== -1) {
     list.splice(index, 1)
   }
-  if (list[0] && list[0].data.createdAt) {
-    list.sort(function(a, b) {
-      if (a.data.createdAt && b.data.createdAt) {
-        return a.data.createdAt.getTime() < b.data.createdAt.getTime() ? 1 : -1
-      }
-      return 0
-    })
-  }
 }
 
 var reRegExp = /[\\^$.*+?()[\]{}|]/g,

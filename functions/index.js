@@ -8,11 +8,11 @@ const cheerio = require('cheerio')
 // exports.helloWorld = functions.https.onRequest((request, response) => {
 //  response.send("Hello from Firebase!");
 // });
-
 exports.getItemData = functions.https.onRequest(async (request, response) => {
-  response.set('Access-Control-Allow-Origin', '*')
-  response.set('Access-Control-Allow-Methods', 'GET')
-  response.set('Access-Control-Allow-Headers', 'Content-Type')
+  response.set('Access-Control-Allow-Origin', request.headers.origin)
+  response.set('Access-Control-Allow-Methods', 'GET, HEAD, OPTIONS, POST')
+  response.set('Access-Control-Allow-Headers', 'Content-Type, authorization')
+
   const url = request.query.url
   if (!url) {
     response.send('')
@@ -31,6 +31,9 @@ exports.getItemData = functions.https.onRequest(async (request, response) => {
     siteName: $('meta[property="og:site_name"]').attr('content')
       ? $('meta[property="og:site_name"]').attr('content')
       : $('meta[name="twitter:site"]').attr('content')
+      ? $('meta[name="twitter:site"]').attr('content')
+      : 'リンク'
   }
   response.send(result)
+  return result
 })
