@@ -266,7 +266,7 @@ export default {
       this.startDateFormatted = this.formatDate(this.startDate)
       const event = await this.getEvent(this.eventId)
       this.name = event.data.name
-      this.description = event.data.name
+      this.description = event.data.description
       this.isPrivate = event.data.isPrivate
       this.tagList = event.data.tagList
       this.headerImageUrl = event.data.headerImageUrl
