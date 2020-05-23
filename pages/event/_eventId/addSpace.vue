@@ -17,6 +17,7 @@
               label="【必須】ヘッダー画像"
               :rules="imageRules"
             ></v-file-input>
+            <v-text-field v-model="name" class="mb-3" dense label="サークル名" outlined></v-text-field>
             <v-text-field v-model="wishListUrl" class="mb-3" dense label="欲しいものリストURL" outlined></v-text-field>
             <v-combobox
               v-model="tagList"
@@ -230,7 +231,8 @@ export default {
     editLinkText: null,
     headerImageUrl: null,
     headerImageFile: false,
-    wishListUrl: null,
+    name: '',
+    wishListUrl: '',
     itemList: [],
     nameRules: [
       v => !!v || 'タイトルは必須です。',
@@ -261,7 +263,7 @@ export default {
   }),
   computed: {
     ...mapGetters('event', ['eventById']),
-    ...mapState('account', ['userId']),
+    ...mapState('account', ['isLogin', 'userId', 'loginUser']),
     eventId() {
       return this.$route.params.eventId
     },
@@ -282,10 +284,10 @@ export default {
     ...mapActions('event', ['getEvent']),
     ...mapActions('space', ['createSpace']),
     init() {
-      this.onLogout(() => {
+      if (!this.isLogin) {
         this.$router.push('/')
-      })
-
+      }
+      this.name = this.loginUser.displayName + 'のスペース'
       this.getEvent(this.eventId)
     },
     onHeaderImagePicked(e) {
@@ -417,7 +419,8 @@ export default {
             headerImageUrl: this.headerImageFile ? null : this.headerImageUrl,
             wishListUrl: this.wishListUrl,
             eventId: this.eventId,
-            tagList: this.tagList
+            tagList: this.tagList,
+            name: this.name
           },
           headerImageFile: this.headerImageFile,
           itemList: this.itemList
