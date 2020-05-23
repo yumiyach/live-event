@@ -451,6 +451,7 @@ export default {
           spaceId: this.spaceId,
           concluded: {
             headerImageUrl: this.headerImageFile ? null : this.headerImageUrl,
+            name: this.name,
             wishListUrl: this.wishListUrl,
             eventId: this.eventId,
             tagToken: this.tagToken(),

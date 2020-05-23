@@ -1,13 +1,17 @@
 <template>
   <v-row class="mx-0 mb-4 align-center">
-    <v-col class="display-1" cols="12">{{ userData.displayName }}のスペース</v-col>
+    <v-col
+      class="display-1"
+      cols="12"
+      v-text="spaceData.name && spaceData.name.length ? spaceData.name : userData.displayName+'のスペース'"
+    ></v-col>
     <v-col
       class="d-flex pt-0"
       align-center
       cols="12"
       style="flex-wrap: wrap; justify-content: space-between;"
     >
-      <userItem :userId="spaceData.userId" />
+      <userItem :userId="spaceData.userId"/>
       <div class="ml-auto">
         <v-btn
           class="mx-1"
@@ -42,18 +46,11 @@
           dark
           color="primary"
           :to="`/event/${spaceData.eventId}/${spaceId}/edit`"
-          >スペースを編集</v-btn
-        >
+        >スペースを編集</v-btn>
       </div>
     </v-col>
     <v-col class="pt-0" cols="12">
-      <v-chip
-        v-for="(tag, index) in spaceData.tagList"
-        :key="index"
-        class="mr-3"
-      >
-        #{{ tag }}
-      </v-chip>
+      <v-chip v-for="(tag, index) in spaceData.tagList" :key="index" class="mr-3">#{{ tag }}</v-chip>
     </v-col>
   </v-row>
 </template>
