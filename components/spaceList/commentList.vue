@@ -19,40 +19,29 @@
                 ></v-textarea>
               </v-form>
             </div>
-            <v-btn depressed color="primary" :loading="isLoading" @click="post"
-              >投稿</v-btn
-            >
+            <v-btn depressed color="primary" :loading="isLoading" @click="post">投稿</v-btn>
           </v-list-item-content>
         </v-list-item>
         <v-list-item v-if="sessionState === 0 && !isLogin">
           <v-list-item-content>
             <v-row>
+              <v-col class="text-center" cols="12">コメントを投稿するにはログインが必要です。</v-col>
               <v-col class="text-center" cols="12">
-                コメントを投稿するにはログインが必要です。
-              </v-col>
-              <v-col class="text-center" cols="12">
-                <v-btn
-                  color="primary"
-                  @click="$refs.loginDialog.visible = true"
-                >
+                <v-btn color="primary" @click="$refs.loginDialog.visible = true">
                   <v-icon left>mdi-login</v-icon>ログイン
                 </v-btn>
               </v-col>
             </v-row>
-            <loginDialog ref="loginDialog" />
+            <loginDialog ref="loginDialog"/>
           </v-list-item-content>
         </v-list-item>
         <v-list-item v-if="sessionState === 1">
-          <v-list-item-content
-            >イベントが終了しているため、新規コメントは投稿できません。</v-list-item-content
-          >
+          <v-list-item-content>イベントが終了しているため、新規コメントは投稿できません。</v-list-item-content>
         </v-list-item>
         <v-list-item v-if="sessionState === -1">
-          <v-list-item-content
-            >イベント開催期間中のみコメントが投稿できます。</v-list-item-content
-          >
+          <v-list-item-content>イベント開催期間中のみコメントが投稿できます。</v-list-item-content>
         </v-list-item>
-        <v-divider />
+        <v-divider/>
       </v-list>
     </v-col>
 
@@ -63,28 +52,25 @@
             <v-list-item-content>
               <p class="mb-2">{{ item.data.comment }}</p>
               <v-list-item-subtitle class="d-flex align-end">
-                <userItem class="mr-2" :userId="item.data.userId" />
-                <div class="shrink ml-auto">
-                  {{ item.data.createdAt | date }}
-                </div>
+                <userItem class="mr-2" :userId="item.data.userId"/>
+                <div class="shrink ml-auto">{{ item.data.createdAt | date }}</div>
                 <v-icon
                   v-if="userId === item.data.userId"
                   class="ml-2"
                   small
                   @click="deleteThisComment(item.id)"
-                  >mdi-delete</v-icon
-                >
+                >mdi-delete</v-icon>
               </v-list-item-subtitle>
             </v-list-item-content>
           </v-list-item>
-          <v-divider />
+          <v-divider/>
         </div>
         <v-list-item>
           <v-list-item-content v-if="sessionState === 0 && commentList.length">
             <p class="mb-2">コメントは以上です</p>
           </v-list-item-content>
           <v-list-item-content v-else-if="sessionState === 0 && isLogin">
-            <p class="mb-2">コメントを投稿しましょう！</p>
+            <p class="mb-2">リアルタイムチャットでサークル主に感想や挨拶を送ろう！</p>
           </v-list-item-content>
         </v-list-item>
       </v-list>

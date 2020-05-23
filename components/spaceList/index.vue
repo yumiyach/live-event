@@ -19,45 +19,40 @@
                   height: 'calc(100vh - 220px)'
                 }"
               >
-                <v-img :src="space.data.headerImageUrl" style="height:100%" />
+                <v-img :src="space.data.headerImageUrl" style="height:100%"/>
               </v-layout>
             </v-layout>
           </v-carousel-item>
         </v-carousel>
       </div>
       <div style="margin-bottom:112px">
-        <spaceHeader :spaceId="spaceList[currentSpaceIndex].id" />
+        <spaceHeader :spaceId="spaceList[currentSpaceIndex].id"/>
         <v-tabs v-model="tab" grow>
           <v-tab class="title">頒布物</v-tab>
-          <v-tab class="title">コメント</v-tab>
+          <v-tab class="title">チャット</v-tab>
         </v-tabs>
 
         <v-tabs-items v-model="tab">
           <v-tab-item>
-            <itemList :spaceId="spaceList[currentSpaceIndex].id" />
+            <itemList :spaceId="spaceList[currentSpaceIndex].id"/>
           </v-tab-item>
 
           <v-tab-item>
-            <commentList :spaceId="spaceList[currentSpaceIndex].id" />
+            <commentList :spaceId="spaceList[currentSpaceIndex].id"/>
           </v-tab-item>
         </v-tabs-items>
       </div>
       <v-footer fixed class="pa-0" color="#ffffff88">
         <v-content class="pa-0">
           <v-layout justify-center>
-            <v-slide-group
-              v-model="currentSpaceIndex"
-              class="pa-4"
-              mandatory
-              center-active
-            >
+            <v-slide-group v-model="currentSpaceIndex" class="pa-4" mandatory center-active>
               <v-slide-item
                 v-for="(space, i) in spaceList"
                 :key="i"
                 v-slot:default="{ active, toggle }"
               >
                 <div @click="toggle">
-                  <spaceItem :spaceId="space.id" :active="active" />
+                  <spaceItem :spaceId="space.id" :active="active"/>
                 </div>
               </v-slide-item>
             </v-slide-group>
@@ -70,14 +65,10 @@
         <v-row align="center" justify="center">
           <v-card>
             <v-card-title>まだスペースがありません。</v-card-title>
-            <v-card-text
-              >スペースを作成して、イベントを盛り上げましょう！</v-card-text
-            >
+            <v-card-text>スペースを作成して、イベントを盛り上げましょう！</v-card-text>
             <v-card-actions class="justify-center">
-              <v-btn large color="primary" @click="addSpace"
-                >サークル参加する</v-btn
-              >
-              <loginDialog ref="loginDialog" />
+              <v-btn large color="primary" @click="addSpace">サークル参加する</v-btn>
+              <loginDialog ref="loginDialog"/>
             </v-card-actions>
           </v-card>
         </v-row>
