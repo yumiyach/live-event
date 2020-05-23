@@ -280,7 +280,7 @@ export default {
   methods: {
     ...mapActions('account', ['onLogout']),
     ...mapActions('event', ['getEvent']),
-    ...mapActions('booth', ['createBooth']),
+    ...mapActions('space', ['createSpace']),
     init() {
       this.onLogout(() => {
         this.$router.push('/')
@@ -412,7 +412,7 @@ export default {
     async submit() {
       if (this.$refs.form.validate()) {
         this.isLoading = true
-        const boothData = {
+        const spaceData = {
           concluded: {
             headerImageUrl: this.headerImageFile ? null : this.headerImageUrl,
             wishListUrl: this.wishListUrl,
@@ -422,7 +422,7 @@ export default {
           headerImageFile: this.headerImageFile,
           itemList: this.itemList
         }
-        const booth = await this.createBooth(boothData)
+        const space = await this.createSpace(spaceData)
         this.isLoading = false
         this.$router.push('/event/' + this.eventId)
       }

@@ -24,9 +24,9 @@ export const mutations = {
 }
 
 export const getters = {
-  commentListByBoothId: state => boothId => {
+  commentListBySpaceId: state => spaceId => {
     return state.commentList
-      .filter(item => item.data.boothId === boothId)
+      .filter(item => item.data.spaceId === spaceId)
       .sort((a, b) => {
         return a.data.createdAt.getTime() < b.data.createdAt.getTime() ? 1 : -1
       })
@@ -52,10 +52,10 @@ export const actions = {
     }
     return comment
   },
-  async listenCommentByBoothId({ dispatch, commit }, boothId) {
-    console.log('listenCommentByBoothId')
-    await commentList.listenByBoothId(
-      boothId,
+  async listenCommentBySpaceId({ dispatch, commit }, spaceId) {
+    console.log('listenCommentBySpaceId')
+    await commentList.listenBySpaceId(
+      spaceId,
       comment => {
         commit('addComment', comment)
         dispatch('user/getUser', comment.data.userId, { root: true })

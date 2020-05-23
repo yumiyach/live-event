@@ -171,9 +171,9 @@
           </v-form>
         </v-card-text>
         <v-card-actions class="pa-4 mx-auto">
-          <v-btn large :to="`/event/${eventId}/${boothId}`">キャンセル</v-btn>
+          <v-btn large :to="`/event/${eventId}/${spaceId}`">キャンセル</v-btn>
           <v-spacer/>
-          <v-btn large color="error" @click="deleteThisBooth">スペース削除</v-btn>
+          <v-btn large color="error" @click="deleteThisSpace">スペース削除</v-btn>
           <v-btn x-large color="accent" @click="submit" :loading="isLoading">
             <v-icon left>mdi-check</v-icon>編集する
           </v-btn>
@@ -280,8 +280,8 @@ export default {
     eventId() {
       return this.$route.params.eventId
     },
-    boothId() {
-      return this.$route.params.boothId
+    spaceId() {
+      return this.$route.params.spaceId
     },
     eventData() {
       return this.eventById(this.eventId).data
@@ -298,17 +298,17 @@ export default {
   methods: {
     ...mapActions('account', ['onLogout']),
     ...mapActions('event', ['getEvent']),
-    ...mapActions('booth', ['getBooth', 'updateBooth', 'deleteBooth']),
+    ...mapActions('space', ['getSpace', 'updateSpace', 'deleteSpace']),
     async init() {
       this.onLogout(() => {
         this.$router.push('/')
       })
       this.getEvent(this.eventId)
-      const booth = await this.getBooth(this.boothId)
-      this.headerImageUrl = booth.data.headerImageUrl
-      this.wishListUrl = booth.data.wishListUrl
-      this.tagList = booth.data.tagList
-      for (const item of booth.data.itemList) {
+      const space = await this.getSpace(this.spaceId)
+      this.headerImageUrl = space.data.headerImageUrl
+      this.wishListUrl = space.data.wishListUrl
+      this.tagList = space.data.tagList
+      for (const item of space.data.itemList) {
         this.itemList.push({ ...item })
       }
     },
@@ -443,8 +443,8 @@ export default {
     async submit() {
       if (this.$refs.form.validate()) {
         this.isLoading = true
-        const boothData = {
-          boothId: this.boothId,
+        const spaceData = {
+          spaceId: this.spaceId,
           concluded: {
             headerImageUrl: this.headerImageFile ? null : this.headerImageUrl,
             wishListUrl: this.wishListUrl,
@@ -455,15 +455,15 @@ export default {
           headerImageFile: this.headerImageFile,
           itemList: this.itemList
         }
-        const booth = await this.updateBooth(boothData)
+        const space = await this.updateSpace(spaceData)
         this.isLoading = false
         this.$router.push('/event/' + this.eventId)
       }
     },
-    async deleteThisBooth() {
+    async deleteThisSpace() {
       if (window.confirm('削除しますか？')) {
         this.isLoading = true
-        await this.deleteBooth(this.boothId)
+        await this.deleteSpace(this.spaceId)
         this.isLoading = false
         this.$router.push('/event/' + this.eventId)
       }

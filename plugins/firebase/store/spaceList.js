@@ -1,9 +1,9 @@
 import { store } from '~/plugins/firebase/app'
 
-class BoothList {
+class SpaceList {
   collection
   constructor() {
-    this.collection = store.collection('booths')
+    this.collection = store.collection('spaces')
   }
   async getByEventId(eventId, callback) {
     const snapShot = await this.collection
@@ -18,4 +18,4 @@ class BoothList {
     })
   }
 }
-export default new BoothList()
+export default new SpaceList()

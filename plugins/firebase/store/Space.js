@@ -1,8 +1,8 @@
 import { store } from '~/plugins/firebase/app'
 import Document from '~/plugins/firebase/store/_document'
-import BoothImage from '~/plugins/firebase/storage/BoothImage'
+import SpaceImage from '~/plugins/firebase/storage/SpaceImage'
 
-export default class Booth extends Document {
+export default class Space extends Document {
   constructor(argument) {
     super()
     this.data = {
@@ -13,7 +13,7 @@ export default class Booth extends Document {
       itemList: [],
       isOnline: false
     }
-    this.collection = store.collection('booths')
+    this.collection = store.collection('spaces')
     this.ready = this.init(argument)
   }
 
@@ -26,7 +26,7 @@ export default class Booth extends Document {
     this.ref = this.collection.doc(this.id)
     await this.getData()
     if (data.headerImageFile) {
-      const headerImage = new BoothImage(
+      const headerImage = new SpaceImage(
         this.id + '/header',
         data.headerImageFile
       )
@@ -56,7 +56,7 @@ export default class Booth extends Document {
     }
     const itemList = await Promise.all(itemListFunc)
     if (data.headerImageFile) {
-      const headerImage = new BoothImage(
+      const headerImage = new SpaceImage(
         this.id + '/header',
         data.headerImageFile
       )
@@ -86,7 +86,7 @@ export default class Booth extends Document {
         linkList: item.linkList
       }
     } else {
-      const itemImage = new BoothImage(
+      const itemImage = new SpaceImage(
         this.id + '/itemList/' + index,
         item.imageFile
       )

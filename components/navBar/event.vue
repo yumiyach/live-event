@@ -92,8 +92,8 @@
             </v-card-text>
             <v-card-text>{{ eventData.description }}</v-card-text>
             <v-card-actions>
-              <div v-if="!myBooth">
-                <v-btn large color="primary" @click="addBooth"
+              <div v-if="!mySpace">
+                <v-btn large color="primary" @click="addSpace"
                   >サークル参加</v-btn
                 >
                 <loginDialog ref="loginDialog" />
@@ -102,7 +102,7 @@
                 v-else
                 large
                 color="primary"
-                :to="`/event/${eventId}/${myBooth.id}/edit`"
+                :to="`/event/${eventId}/${mySpace.id}/edit`"
                 >スペースを編集</v-btn
               >
               <v-spacer></v-spacer>
@@ -138,16 +138,16 @@ export default {
   computed: {
     ...mapState('account', ['isLogin', 'userId']),
     ...mapGetters('event', ['eventById']),
-    ...mapGetters('booth', ['boothListByEventId']),
+    ...mapGetters('space', ['spaceListByEventId']),
     eventId() {
       return this.$route.params.eventId
     },
     eventData() {
       return this.eventById(this.eventId).data
     },
-    myBooth() {
-      const boothList = this.boothListByEventId(this.eventId)
-      return boothList.find(item => item.data.userId === this.userId)
+    mySpace() {
+      const spaceList = this.spaceListByEventId(this.eventId)
+      return spaceList.find(item => item.data.userId === this.userId)
     },
     date() {
       if (!this.eventData.startDate || !this.eventData.endDate) {
@@ -204,11 +204,11 @@ export default {
     }
   },
   methods: {
-    addBooth() {
+    addSpace() {
       if (this.isLogin) {
-        this.$router.push(`/event/${this.eventId}/addBooth`)
+        this.$router.push(`/event/${this.eventId}/addSpace`)
       } else {
-        this.$refs.loginDialog.open(`/event/${this.eventId}/addBooth`)
+        this.$refs.loginDialog.open(`/event/${this.eventId}/addSpace`)
       }
     }
   }

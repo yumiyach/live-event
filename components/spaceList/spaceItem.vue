@@ -1,6 +1,6 @@
 <template>
   <v-card class="mx-4" height="80" width="80">
-    <v-img :src="boothData.headerImageUrl" aspect-ratio="1">
+    <v-img :src="spaceData.headerImageUrl" aspect-ratio="1">
       <v-row
         class="fill-height caption"
         align="center"
@@ -22,7 +22,7 @@ import { mapGetters, mapActions } from 'vuex'
 
 export default {
   props: {
-    boothId: {
+    spaceId: {
       type: String,
       required: false,
       default: null
@@ -34,13 +34,13 @@ export default {
     }
   },
   computed: {
-    ...mapGetters('booth', ['boothById']),
+    ...mapGetters('space', ['spaceById']),
     ...mapGetters('user', ['userById']),
-    boothData() {
-      return this.boothById(this.boothId).data
+    spaceData() {
+      return this.spaceById(this.spaceId).data
     },
     userData() {
-      return this.userById(this.boothData.userId).data
+      return this.userById(this.spaceData.userId).data
     }
   }
 }
