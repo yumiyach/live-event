@@ -1,11 +1,11 @@
 import { store } from '~/plugins/firebase/app'
 
-class BoothList {
+class SpaceList {
   collection
   constructor() {
     this.collection = store.collection('comments')
   }
-  async getByBoothId(boothId, callback) {
+  async getBySpaceId(boothId, callback) {
     const snapShot = await this.collection
       .where('boothId', '==', boothId)
       .orderBy('createdAt', 'desc')
@@ -17,7 +17,7 @@ class BoothList {
       })
     })
   }
-  listenByBoothId(boothId, addCallback, deleteCallback) {
+  listenBySpaceId(boothId, addCallback, deleteCallback) {
     this.collection
       .where('boothId', '==', boothId)
       .onSnapshot(function(snapshot) {
@@ -41,4 +41,4 @@ class BoothList {
       })
   }
 }
-export default new BoothList()
+export default new SpaceList()

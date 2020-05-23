@@ -6,11 +6,13 @@
           <v-icon>mdi-menu</v-icon>
         </v-btn>
 
-        <v-spacer />
-        <v-toolbar-title class="logo" style="font-size:24px">{{
+        <v-spacer/>
+        <v-toolbar-title class="logo" style="font-size:24px">
+          {{
           eventData.name
-        }}</v-toolbar-title>
-        <v-spacer />
+          }}
+        </v-toolbar-title>
+        <v-spacer/>
         <v-btn
           fab
           depressed
@@ -23,15 +25,15 @@
         </v-btn>
         <v-dialog v-model="eventInfomationVisible" max-width="1000px">
           <v-card>
-            <v-img :src="eventData.headerImageUrl" />
+            <v-img :src="eventData.headerImageUrl"/>
             <v-card-title class="d-flex">
               <span class="mr-3">{{ eventData.name }}</span>
               <div class="ml-auto">
                 <v-btn
                   class="mx-1"
-                  fab
+                  left
                   dark
-                  x-small
+                  small
                   color="#55acee"
                   @click="
                     share(
@@ -47,36 +49,32 @@
                     )
                   "
                 >
-                  <v-icon dark>mdi-twitter</v-icon>
+                  <v-icon dark>mdi-twitter</v-icon>ツイッターで宣伝
+                </v-btn>
+                <v-btn class="mx-1" left small @click="execCopyUrl">
+                  <v-icon>mdi-link</v-icon>URLをコピー
                 </v-btn>
                 <v-btn
                   small
                   v-if="eventData.userId === userId"
                   color="primary"
                   :to="`/event/${eventId}/edit`"
-                  >イベント編集</v-btn
-                >
+                >イベント編集</v-btn>
               </div>
             </v-card-title>
             <v-card-text>
               <v-layout align-center class="mb-2" wrap>
                 <v-chip small class="mr-2" color="primary">主催</v-chip>
-                <userItem v-if="eventData.userId" :userId="eventData.userId" />
+                <userItem v-if="eventData.userId" :userId="eventData.userId"/>
               </v-layout>
               <v-layout align-center wrap>
                 <v-chip small class="mr-2" color="primary">日時</v-chip>
-                <v-chip
-                  v-if="inSession"
-                  label
-                  outlined
-                  x-small
-                  class="mr-2"
-                  color="primary"
-                  >開催中</v-chip
-                >
-                <v-chip v-else-if="until" label outlined x-small class="mr-2">{{
+                <v-chip v-if="inSession" label outlined x-small class="mr-2" color="primary">開催中</v-chip>
+                <v-chip v-else-if="until" label outlined x-small class="mr-2">
+                  {{
                   until
-                }}</v-chip>
+                  }}
+                </v-chip>
                 <div class="mr-2">{{ date }}</div>
               </v-layout>
             </v-card-text>
@@ -85,37 +83,30 @@
                 v-for="(tag, index) in eventData.tagList"
                 :key="index"
                 class="mr-3"
-                x-small=""
-              >
-                #{{ tag }}
-              </v-chip>
+                x-small
+              >#{{ tag }}</v-chip>
             </v-card-text>
             <v-card-text>{{ eventData.description }}</v-card-text>
             <v-card-actions>
-              <div v-if="!myBooth">
-                <v-btn large color="primary" @click="addBooth"
-                  >サークル参加</v-btn
-                >
-                <loginDialog ref="loginDialog" />
+              <div v-if="!mySpace">
+                <v-btn large color="primary" @click="addSpace">サークル参加</v-btn>
+                <loginDialog ref="loginDialog"/>
               </div>
               <v-btn
                 v-else
                 large
                 color="primary"
-                :to="`/event/${eventId}/${myBooth.id}/edit`"
-                >スペースを編集</v-btn
-              >
+                :to="`/event/${eventId}/${mySpace.id}/edit`"
+              >スペースを編集</v-btn>
               <v-spacer></v-spacer>
-              <v-btn depressed @click="eventInfomationVisible = false"
-                >閉じる</v-btn
-              >
+              <v-btn depressed @click="eventInfomationVisible = false">閉じる</v-btn>
             </v-card-actions>
           </v-card>
         </v-dialog>
       </v-layout>
     </v-app-bar>
     <v-navigation-drawer v-model="drawer" temporary fixed>
-      <drawer-menu />
+      <drawer-menu/>
     </v-navigation-drawer>
   </div>
 </template>
@@ -138,16 +129,16 @@ export default {
   computed: {
     ...mapState('account', ['isLogin', 'userId']),
     ...mapGetters('event', ['eventById']),
-    ...mapGetters('booth', ['boothListByEventId']),
+    ...mapGetters('space', ['spaceListByEventId']),
     eventId() {
       return this.$route.params.eventId
     },
     eventData() {
       return this.eventById(this.eventId).data
     },
-    myBooth() {
-      const boothList = this.boothListByEventId(this.eventId)
-      return boothList.find(item => item.data.userId === this.userId)
+    mySpace() {
+      const spaceList = this.spaceListByEventId(this.eventId)
+      return spaceList.find(item => item.data.userId === this.userId)
     },
     date() {
       if (!this.eventData.startDate || !this.eventData.endDate) {
@@ -204,12 +195,34 @@ export default {
     }
   },
   methods: {
-    addBooth() {
+    addSpace() {
       if (this.isLogin) {
-        this.$router.push(`/event/${this.eventId}/addBooth`)
+        this.$router.push(`/event/${this.eventId}/addSpace`)
       } else {
-        this.$refs.loginDialog.open(`/event/${this.eventId}/addBooth`)
+        this.$refs.loginDialog.open(`/event/${this.eventId}/addSpace`)
       }
+    },
+    execCopyUrl() {
+      var tmp = document.createElement('div')
+      var pre = document.createElement('pre')
+
+      pre.style.webkitUserSelect = 'auto'
+      pre.style.userSelect = 'auto'
+
+      tmp.appendChild(pre).textContent =
+        eventData.name +
+        ' https://epic-wiles-b51323.netlify.app/event/' +
+        this.eventId
+      var s = tmp.style
+      s.position = 'fixed'
+      s.right = '200%'
+
+      document.body.appendChild(tmp)
+      document.getSelection().selectAllChildren(tmp)
+      var result = document.execCommand('copy')
+      document.body.removeChild(tmp)
+
+      return result
     }
   }
 }

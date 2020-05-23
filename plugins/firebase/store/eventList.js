@@ -1,6 +1,6 @@
 import { store } from '~/plugins/firebase/app'
 
-class BoothList {
+class SpaceList {
   collection
   constructor() {
     this.collection = store.collection('events')
@@ -15,4 +15,4 @@ class BoothList {
     })
   }
 }
-export default new BoothList()
+export default new SpaceList()

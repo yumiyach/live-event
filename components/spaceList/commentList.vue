@@ -100,7 +100,7 @@ import userItem from '~/components/userItem'
 export default {
   components: { loginDialog, userItem },
   props: {
-    boothId: {
+    spaceId: {
       type: String,
       required: false,
       default: null
@@ -112,14 +112,14 @@ export default {
   }),
   computed: {
     ...mapState('account', ['isLogin', 'userId']),
-    ...mapGetters('comment', ['commentListByBoothId']),
-    ...mapGetters('booth', ['boothById']),
+    ...mapGetters('comment', ['commentListBySpaceId']),
+    ...mapGetters('space', ['spaceById']),
     ...mapGetters('event', ['eventById']),
-    boothData() {
-      return this.boothById(this.boothId).data
+    spaceData() {
+      return this.spaceById(this.spaceId).data
     },
     eventData() {
-      return this.eventById(this.boothData.eventId).data
+      return this.eventById(this.spaceData.eventId).data
     },
     sessionState() {
       if (!this.eventData.startDate || !this.eventData.endDate) {
@@ -136,7 +136,7 @@ export default {
       return 1
     },
     commentList() {
-      return this.commentListByBoothId(this.boothId)
+      return this.commentListBySpaceId(this.spaceId)
     }
   },
   created() {
@@ -145,19 +145,19 @@ export default {
   methods: {
     ...mapActions('comment', [
       'createComment',
-      'listenCommentByBoothId',
+      'listenCommentBySpaceId',
       'deleteComment'
     ]),
     init() {
-      this.listenCommentByBoothId(this.boothId)
+      this.listenCommentBySpaceId(this.spaceId)
     },
     async post() {
       if (this.$refs.form.validate()) {
         this.isLoading = true
         await this.createComment({
           comment: this.commentText,
-          boothId: this.boothId,
-          eventId: this.boothData.eventId
+          spaceId: this.spaceId,
+          eventId: this.spaceData.eventId
         })
         this.$refs.form.reset()
         this.isLoading = false

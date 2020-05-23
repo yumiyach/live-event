@@ -1,6 +1,6 @@
 <template>
   <v-row>
-    <v-col v-for="(item, i) in boothData.itemList" :key="i" cols="12" md="6">
+    <v-col v-for="(item, i) in spaceData.itemList" :key="i" cols="12" md="6">
       <v-card>
         <v-row class="ma-0">
           <v-col class="pa-0" cols="12" sm="6">
@@ -16,7 +16,7 @@
               <v-btn :href="item.sampleUrl" target="_blank" small outlined>サンプルはこちら</v-btn>
             </v-card-actions>
             <v-card-subtitle>{{item.description}}</v-card-subtitle>
-            <v-card-actions v-if="sessionState===0||sessionState===1||isMyBooth" class="mt-auto">
+            <v-card-actions v-if="sessionState===0||sessionState===1||isMySpace" class="mt-auto">
               <v-btn
                 v-for="(link, k) in item.linkList"
                 :key="k"
@@ -40,7 +40,7 @@ import { mapState, mapGetters, mapActions } from 'vuex'
 
 export default {
   props: {
-    boothId: {
+    spaceId: {
       type: String,
       required: false,
       default: null
@@ -48,13 +48,13 @@ export default {
   },
   computed: {
     ...mapGetters('event', ['eventById']),
-    ...mapGetters('booth', ['boothById']),
+    ...mapGetters('space', ['spaceById']),
     ...mapState('account', ['userId']),
-    boothData() {
-      return this.boothById(this.boothId).data
+    spaceData() {
+      return this.spaceById(this.spaceId).data
     },
     eventData() {
-      return this.eventById(this.boothData.eventId).data
+      return this.eventById(this.spaceData.eventId).data
     },
     sessionState() {
       if (!this.eventData.startDate || !this.eventData.endDate) {
@@ -70,8 +70,8 @@ export default {
       }
       return 1
     },
-    isMyBooth() {
-      return this.userId === this.boothData.userId
+    isMySpace() {
+      return this.userId === this.spaceData.userId
     }
   }
 }

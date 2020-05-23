@@ -7,7 +7,7 @@
         class="my-3 mx-auto"
         max-width="876"
       >
-        <v-card-title class="display-1 accent--text">『{{ eventData.name }}』のスペースを編集</v-card-title>
+        <v-card-title class="display-1 accent--text">『{{ eventData.name }}』にサークル参加する</v-card-title>
         <v-card-text>
           <v-form ref="form" lazy-validation @submit.prevent>
             <v-img v-if="headerImageUrl" :src="headerImageUrl" aspect-ratio="2"></v-img>
@@ -17,6 +17,7 @@
               label="【必須】ヘッダー画像"
               :rules="imageRules"
             ></v-file-input>
+            <v-text-field v-model="name" class="mb-3" dense label="サークル名" outlined></v-text-field>
             <v-text-field v-model="wishListUrl" class="mb-3" dense label="欲しいものリストURL" outlined></v-text-field>
             <v-combobox
               v-model="tagList"
@@ -99,7 +100,7 @@
                           v-model="itemList[i].name"
                           :counter="100"
                           class="mb-3"
-                          label="【必須】タイトル"
+                          label="タイトル"
                           :rules="nameRules"
                         ></v-text-field>
                       </v-card-title>
@@ -170,12 +171,9 @@
             </v-row>
           </v-form>
         </v-card-text>
-        <v-card-actions class="pa-4 mx-auto">
-          <v-btn large :to="`/event/${eventId}/${boothId}`">キャンセル</v-btn>
-          <v-spacer/>
-          <v-btn large color="error" @click="deleteThisBooth">スペース削除</v-btn>
-          <v-btn x-large color="accent" @click="submit" :loading="isLoading">
-            <v-icon left>mdi-check</v-icon>編集する
+        <v-card-actions class="pa-4 mx-auto" style="max-width:600px">
+          <v-btn x-large style="width:100%" color="accent" @click="submit" :loading="isLoading">
+            <v-icon left>mdi-check</v-icon>出展する
           </v-btn>
         </v-card-actions>
 
@@ -222,7 +220,7 @@ import axios from 'axios'
 
 export default {
   components: {},
-  data: vm => ({
+  data: () => ({
     isLoading: false,
     search: null,
     addItemUrl: null,
@@ -233,13 +231,19 @@ export default {
     editLinkText: null,
     headerImageUrl: null,
     headerImageFile: false,
-    wishListUrl: null,
+    name: '',
+    wishListUrl: '',
     itemList: [],
     nameRules: [
       v => !!v || 'タイトルは必須です。',
       v =>
         (v && Array.from(v).length <= 100) ||
         'タイトルは100文字以内にしてください。'
+    ],
+    imageRules: [
+      value => typeof value === 'object' || 'ヘッダー画像は必須です。',
+      value =>
+        (value && value.size < 2000000) || '画像サイズは2MB以下にしてください。'
     ],
     tagListItem: ['NL', 'BL', 'GL', 'パロディ'],
     tagList: [],
@@ -255,33 +259,13 @@ export default {
         }
         return true
       }
-    ],
-    imageRules: [
-      value =>
-        typeof value === 'object' ||
-        typeof vm.headerImageUrl === 'object' ||
-        typeof vm.headerImageUrl !== null ||
-        'ヘッダー画像は必須です。',
-      value =>
-        typeof vm.headerImageUrl === 'object' ||
-        typeof vm.headerImageUrl !== null ||
-        (value && value.size < 2000000) ||
-        '画像サイズは2MB以下にしてください。',
-      value =>
-        typeof vm.headerImageUrl === 'object' ||
-        typeof vm.headerImageUrl !== null ||
-        (value && value.size < 2000000) ||
-        '画像サイズは2MB以下にしてください。'
     ]
   }),
   computed: {
     ...mapGetters('event', ['eventById']),
-    ...mapState('account', ['userId']),
+    ...mapState('account', ['isLogin', 'userId', 'loginUser']),
     eventId() {
       return this.$route.params.eventId
-    },
-    boothId() {
-      return this.$route.params.boothId
     },
     eventData() {
       return this.eventById(this.eventId).data
@@ -298,19 +282,13 @@ export default {
   methods: {
     ...mapActions('account', ['onLogout']),
     ...mapActions('event', ['getEvent']),
-    ...mapActions('booth', ['getBooth', 'updateBooth', 'deleteBooth']),
-    async init() {
-      this.onLogout(() => {
+    ...mapActions('space', ['createSpace']),
+    init() {
+      if (!this.isLogin) {
         this.$router.push('/')
-      })
-      this.getEvent(this.eventId)
-      const booth = await this.getBooth(this.boothId)
-      this.headerImageUrl = booth.data.headerImageUrl
-      this.wishListUrl = booth.data.wishListUrl
-      this.tagList = booth.data.tagList
-      for (const item of booth.data.itemList) {
-        this.itemList.push({ ...item })
       }
+      this.name = this.loginUser.displayName + 'のスペース'
+      this.getEvent(this.eventId)
     },
     onHeaderImagePicked(e) {
       const file = e
@@ -342,8 +320,8 @@ export default {
           name: data.title,
           description: data.description,
           imageUrl: data.imageUrl,
-          imageFile: false,
           sampleUrl: '',
+          imageFile: false,
           linkList: [
             {
               url: this.addItemUrl,
@@ -433,37 +411,21 @@ export default {
       this.editLinkIndex = -1
       this.editLinkVisible = false
     },
-    tagToken() {
-      const tagToken = {}
-      for (const tag of this.tagList) {
-        tagToken[tag] = true
-      }
-      return tagToken
-    },
     async submit() {
       if (this.$refs.form.validate()) {
         this.isLoading = true
-        const boothData = {
-          boothId: this.boothId,
+        const spaceData = {
           concluded: {
             headerImageUrl: this.headerImageFile ? null : this.headerImageUrl,
             wishListUrl: this.wishListUrl,
             eventId: this.eventId,
-            tagToken: this.tagToken(),
-            tagList: this.tagList
+            tagList: this.tagList,
+            name: this.name
           },
           headerImageFile: this.headerImageFile,
           itemList: this.itemList
         }
-        const booth = await this.updateBooth(boothData)
-        this.isLoading = false
-        this.$router.push('/event/' + this.eventId)
-      }
-    },
-    async deleteThisBooth() {
-      if (window.confirm('削除しますか？')) {
-        this.isLoading = true
-        await this.deleteBooth(this.boothId)
+        const space = await this.createSpace(spaceData)
         this.isLoading = false
         this.$router.push('/event/' + this.eventId)
       }

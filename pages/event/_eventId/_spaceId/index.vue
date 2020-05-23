@@ -1,9 +1,9 @@
 <template>
   <v-container fill-height>
     <component
-      :is="isLoading ? null : 'boothList'"
+      :is="isLoading ? null : 'spaceList'"
       :eventId="eventId"
-      :currentBoothId="boothId"
+      :currentSpaceId="spaceId"
       class="pt-0"
     />
   </v-container>
@@ -11,11 +11,11 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex'
-import boothList from '~/components/boothList'
+import spaceList from '~/components/spaceList'
 
 export default {
   layout: 'event',
-  components: { boothList },
+  components: { spaceList },
   data: () => ({
     isLoading: true
   }),
@@ -23,8 +23,8 @@ export default {
     eventId() {
       return this.$route.params.eventId
     },
-    boothId() {
-      return this.$route.params.boothId
+    spaceId() {
+      return this.$route.params.spaceId
     }
   },
   created() {
@@ -32,10 +32,10 @@ export default {
   },
   methods: {
     ...mapActions('event', ['getEvent']),
-    ...mapActions('booth', ['getBoothListByEventId']),
+    ...mapActions('space', ['getSpaceListByEventId']),
     init() {
       this.getEvent(this.eventId)
-      this.getBoothListByEventId(this.eventId)
+      this.getSpaceListByEventId(this.eventId)
       this.isLoading = false
     }
   }
