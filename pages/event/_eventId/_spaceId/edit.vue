@@ -176,7 +176,7 @@
           <v-spacer/>
           <v-btn large color="error" @click="deleteThisSpace">スペース削除</v-btn>
           <v-btn x-large color="accent" @click="submit" :loading="isLoading">
-            <v-icon left>mdi-check</v-icon>編集する
+            <v-icon left>mdi-check</v-icon>更新する
           </v-btn>
         </v-card-actions>
 
