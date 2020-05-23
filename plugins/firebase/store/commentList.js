@@ -5,9 +5,9 @@ class SpaceList {
   constructor() {
     this.collection = store.collection('comments')
   }
-  async getBySpaceId(boothId, callback) {
+  async getBySpaceId(spaceId, callback) {
     const snapShot = await this.collection
-      .where('boothId', '==', boothId)
+      .where('spaceId', '==', spaceId)
       .orderBy('createdAt', 'desc')
       .get()
     snapShot.forEach(async doc => {
@@ -17,9 +17,9 @@ class SpaceList {
       })
     })
   }
-  listenBySpaceId(boothId, addCallback, deleteCallback) {
+  listenBySpaceId(spaceId, addCallback, deleteCallback) {
     this.collection
-      .where('boothId', '==', boothId)
+      .where('spaceId', '==', spaceId)
       .onSnapshot(function(snapshot) {
         snapshot.docChanges().forEach(function(change) {
           if (change.type === 'added') {
