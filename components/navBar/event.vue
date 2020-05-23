@@ -154,7 +154,19 @@ export default {
         ('00' + this.eventData.startDate.getHours()).slice(-2) +
         ':' +
         ('00' + this.eventData.startDate.getMinutes()).slice(-2) +
-        '～' +
+        ' ～ ' +
+        (this.eventData.startDate.getFullYear() !==
+          this.eventData.endDate.getFullYear() ||
+        this.eventData.startDate.getMonth() !==
+          this.eventData.endDate.getMonth() ||
+        this.eventData.startDate.getDate() !== this.eventData.endDate.getDate()
+          ? this.eventData.endDate.getFullYear() +
+            '/' +
+            ('00' + (this.eventData.endDate.getMonth() + 1)).slice(-2) +
+            '/' +
+            ('00' + this.eventData.endDate.getDate()).slice(-2) +
+            ' '
+          : '') +
         ('00' + this.eventData.endDate.getHours()).slice(-2) +
         ':' +
         ('00' + this.eventData.endDate.getMinutes()).slice(-2)

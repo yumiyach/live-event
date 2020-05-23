@@ -77,7 +77,7 @@
             <v-img v-if="headerImageUrl" :src="headerImageUrl"/>
             <v-file-input :rules="imageRules" @change="onFilePicked" accept="image/*" label="トップ画像"></v-file-input>
             <v-row>
-              <v-col cols="12" sm="4">
+              <v-col cols="6" sm="4">
                 <v-menu
                   ref="startDateVisible"
                   v-model="startDateVisible"
@@ -104,10 +104,37 @@
                   </v-date-picker>
                 </v-menu>
               </v-col>
-              <v-col cols="6" sm="4">
+              <v-col cols="6" sm="2">
                 <v-text-field v-model="startTime" label="開始時刻" type="time" :clearable="false"></v-text-field>
               </v-col>
               <v-col cols="6" sm="4">
+                <v-menu
+                  ref="endDateVisible"
+                  v-model="endDateVisible"
+                  :close-on-content-click="false"
+                  transition="scale-transition"
+                  offset-y
+                  max-width="290px"
+                  min-width="290px"
+                >
+                  <template v-slot:activator="{ on }">
+                    <v-text-field
+                      v-model="endDateFormatted"
+                      label="終了日"
+                      hint="YYYY/MM/DD で入力してください"
+                      persistent-hint
+                      @blur="endDate = parseDate(endDateFormatted)"
+                      v-on="on"
+                    ></v-text-field>
+                  </template>
+                  <v-date-picker v-model="endDate" locale="jp" no-title :min="today">
+                    <v-layout justify-end>
+                      <v-btn color="primary" @click="endDateVisible = false">確定</v-btn>
+                    </v-layout>
+                  </v-date-picker>
+                </v-menu>
+              </v-col>
+              <v-col cols="6" sm="2">
                 <v-text-field v-model="endTime" label="終了時刻" type="time" :clearable="false"></v-text-field>
               </v-col>
             </v-row>
@@ -199,6 +226,9 @@ export default {
     startDate: '2020-01-01',
     startDateFormatted: '2020/01/01',
     startDateVisible: false,
+    endDate: '2020-01-01',
+    endDateFormatted: '2020/01/01',
+    endDateVisible: false,
     startTime: '10:00:00',
     endTime: '16:00:00',
     isPrivate: false
@@ -212,6 +242,9 @@ export default {
   watch: {
     startDate(val) {
       this.startDateFormatted = this.formatDate(this.startDate)
+    },
+    endDate(val) {
+      this.endDateFormatted = this.formatDate(this.endDate)
     }
   },
   created() {
@@ -233,6 +266,13 @@ export default {
         ('00' + today.getDate()).slice(-2)
       this.today = this.startDate
       this.startDateFormatted = this.formatDate(this.startDate)
+      this.endDate =
+        today.getFullYear() +
+        '-' +
+        ('00' + (today.getMonth() + 1)).slice(-2) +
+        '-' +
+        ('00' + today.getDate()).slice(-2)
+      this.endDateFormatted = this.formatDate(this.endDate)
       const event = await this.getEvent(this.eventId)
       this.name = event.data.name
       this.description = event.data.description
@@ -246,6 +286,13 @@ export default {
         '-' +
         ('00' + event.data.startDate.getDate()).slice(-2)
       this.startDateFormatted = this.formatDate(this.startDate)
+      this.endDate =
+        event.data.endDate.getFullYear() +
+        '-' +
+        ('00' + (event.data.endDate.getMonth() + 1)).slice(-2) +
+        '-' +
+        ('00' + event.data.endDate.getDate()).slice(-2)
+      this.endDateFormatted = this.formatDate(this.endDate)
 
       this.startTime =
         ('00' + event.data.startDate.getHours()).slice(-2) +
@@ -270,7 +317,6 @@ export default {
         })
       } else {
         this.headerImageFile = ''
-        this.startDate = ''
       }
     },
     formatDate(date) {
@@ -302,7 +348,7 @@ export default {
             tagList: this.tagList,
             isPrivate: this.isPrivate,
             startDate: new Date(this.startDate + ' ' + this.startTime),
-            endDate: new Date(this.startDate + ' ' + this.endTime)
+            endDate: new Date(this.endDate + ' ' + this.endTime)
           }
         }
         if (this.headerImageFile) {
