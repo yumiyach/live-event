@@ -1,6 +1,6 @@
 <template>
   <v-row class="mx-0 mb-4 align-center">
-    <v-col class="display-1" cols="12">{{ userData.displayName }}のブース</v-col>
+    <v-col class="display-1" cols="12">{{ userData.displayName }}のスペース</v-col>
     <v-col
       class="d-flex pt-0"
       align-center
@@ -18,7 +18,7 @@
           @click="
             share(
               'twitter',
-              userData.displayName + 'のブース #' + eventData.name
+              userData.displayName + 'のスペース #' + eventData.name
             )
           "
         >
@@ -42,7 +42,7 @@
           dark
           color="primary"
           :to="`/event/${boothData.eventId}/${boothId}/edit`"
-          >ブースを編集</v-btn
+          >スペースを編集</v-btn
         >
       </div>
     </v-col>

@@ -7,7 +7,7 @@
         class="my-3 mx-auto"
         max-width="876"
       >
-        <v-card-title class="display-1 accent--text">『{{ eventData.name }}』のブースを編集</v-card-title>
+        <v-card-title class="display-1 accent--text">『{{ eventData.name }}』のスペースを編集</v-card-title>
         <v-card-text>
           <v-form ref="form" lazy-validation @submit.prevent>
             <v-img v-if="headerImageUrl" :src="headerImageUrl" aspect-ratio="2"></v-img>
@@ -173,7 +173,7 @@
         <v-card-actions class="pa-4 mx-auto">
           <v-btn large :to="`/event/${eventId}/${boothId}`">キャンセル</v-btn>
           <v-spacer/>
-          <v-btn large color="error" @click="deleteThisBooth">ブース削除</v-btn>
+          <v-btn large color="error" @click="deleteThisBooth">スペース削除</v-btn>
           <v-btn x-large color="accent" @click="submit" :loading="isLoading">
             <v-icon left>mdi-check</v-icon>編集する
           </v-btn>

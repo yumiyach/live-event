@@ -103,7 +103,7 @@
                 large
                 color="primary"
                 :to="`/event/${eventId}/${myBooth.id}/edit`"
-                >ブースを編集</v-btn
+                >スペースを編集</v-btn
               >
               <v-spacer></v-spacer>
               <v-btn depressed @click="eventInfomationVisible = false"

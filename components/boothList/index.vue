@@ -69,9 +69,9 @@
       <v-content>
         <v-row align="center" justify="center">
           <v-card>
-            <v-card-title>まだブースがありません。</v-card-title>
+            <v-card-title>まだスペースがありません。</v-card-title>
             <v-card-text
-              >ブースを作成して、イベントを盛り上げましょう！</v-card-text
+              >スペースを作成して、イベントを盛り上げましょう！</v-card-text
             >
             <v-card-actions class="justify-center">
               <v-btn large color="primary" @click="addBooth"
